@@ -1,7 +1,7 @@
 # Hubsecure_storage
 
 
-HubSecure' Storage module gives power to user and enterprise to share important files, folder with people within and outside organsation. Higly complicated encryption methodology is used to create a hash which is then save saved on blochain which makes HubSecure reliable and safe platform to use as dcouments becomes incorruptible and secure. File itself is saved on distributed networks using IPFS protocol in chunks. <br /> <br />
+HubSecure' Storage module gives power to user and enterprise to share important files, folder with people within and outside organsation. Higly complicated encryption methodology is used to create a hash which is then save saved on blockchain which makes HubSecure reliable and safe platform to use as dcouments becomes incorruptible and secure. File itself is saved on distributed networks using IPFS protocol in chunks. <br /> <br />
 
 The complete HubSecure's Storage module consist of 3 components <br />
   a. Frontend  <br />
