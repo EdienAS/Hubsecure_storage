@@ -1,0 +1,101 @@
+.image-thumb {
+    .iq-thumb {
+        position: relative;
+        overflow: hidden;
+        z-index: 9;
+
+        img {
+            max-height: 100px;
+        }
+        .iq-image-overlay {
+            background: #F4F9FB;
+            position: absolute;
+            height: 100%;
+            width: 100%;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            right: 0;  
+            opacity: 1;   
+            z-index: -1;  
+            @if $enable-transitions == true {
+                @include transition-mixin(all 0.4s ease-in-out);
+            }
+        }    
+        .overlay-img-icon {
+            position: absolute;
+            top: 42%;
+            left: 42%;
+            opacity: 0;
+            height: 35px;
+            width: 35px;
+            background: $white;   
+            @if $enable-transitions == true {
+                @include transition-mixin(all 0.4s ease-in-out);
+            }
+            @if $enable-rounded == true {
+                @include radius-mixin($border-radius-circle);
+            }
+    
+            i {
+                font-size: 24px;
+                line-height: 37px;
+                color: $black;
+            }
+        }
+    }
+    &:hover {
+		.iq-thumb {
+			.overlay-img-icon {
+				opacity: 1;
+			}
+		}
+	}
+}
+.list-grid-toggle { 
+    .icon {
+        &.i-grid {
+            display: none;
+        }
+        &.icon-grid {
+            &.i-grid {
+                display: block;
+                height: 20px;
+                width: 20px;
+                font-size: 20px;
+                color: $dark;
+            }
+            &.i-list {
+                display: none;
+            }
+        }            
+        &.i-list {
+            display: block;
+            height: 20px;
+            width: 20px;
+            font-size: 20px;
+            color: $dark;
+        }
+    }  
+    .label {
+		&.label-list {
+            display: none;
+		}
+	}
+}
+.icon {
+	&.i-grid {
+		display: none;
+	}
+	&.icon-grid {
+		&.i-grid {
+			display: block;
+		}
+		&.i-list {
+			display: none;
+		}
+	}
+	&.i-list {
+		display: block;
+	}
+}
