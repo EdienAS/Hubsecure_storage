@@ -50,7 +50,7 @@ export default {
     HbLogInUserAn({ commit }, payload) {
       return new Promise((resolve, reject) => {
         axios
-          .post("https://api.hubsecure.thehubit.no/api/v1/login", payload)
+          .post("/login", payload)
           .then((res) => {
             commit("HbSetUserMn", res.data.data);
             commit("HbSetToken", res.data.data.token);
@@ -89,7 +89,7 @@ export default {
     HbRegisterUserAn({ commit }, payload) {
       return new Promise((resolve, reject) => {
         axios
-          .post("https://api.hubsecure.thehubit.no/api/v1/user/register", payload)
+          .post("/user/register", payload)
           .then((res) => {
             commit("HbSetUserMn", res.data.data);
             commit("HbSetToken", res.data.data.token);
@@ -128,7 +128,7 @@ export default {
     HbLogOutUserAn({ commit }) {
       return new Promise((resolve, reject) => {
         axios
-          .post("https://api.hubsecure.thehubit.no/api/v1/logout")
+          .post("/logout")
           .then((res) => {
             if (res.status === 204) {
               commit("HbRemoveUserMn", "");
