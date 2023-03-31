@@ -12,33 +12,46 @@ The complete respository have all three component in its respective folder.<br /
 
 
 
-## Dependencies
-The project relies on the following dependencies:
-- Vue.js: ^2.6.14
-- Vue Router: ^3.5.2
-- Axios: ^0.21.1
-- Vuex: ^3.0.0
-## Getting Started
-To get started with the project, you will need to clone the repository and install the necessary dependencies. You can do this by running the following commands:
+
+# Deployment
+
+#### Note
+
+* Change .env files as required on each app.
+
+```sh
+$ chmod +x *.sh
+$ ./deploy.sh
 ```
-git clone https://github.com/EdienAS/Hubsecure_storage.git
-cd hubsecure
-npm install
-```
-Once you have installed the dependencies, you can start the development server by running the following command:
-```
-npm run dev
-```
-This will start the development server and the application will be available at <strong>http://localhost:8080</strong>
-## Building for Production
-To build the application for production, you can run the following command:
-```
-npm run build
-```
-This will create a <strong>dist</strong> folder that contains the compiled and minified files that are ready for deployment.
+
+# xrpl_api
+
+This API helps to Upload/Download files, Encrypt/Decrypt Files and Create Encrypted NFT inside XRPL.
+
+#### What This API does not handle?
+
+* Any User Data
+* Any Unencrypted files in local storage
+* Host Customers XRPL Wallet data [Seed, Sequence]
+* Host Encryption / Decryption key
+
+#### What This API does?
+
+* Handles File Uploads and Provide UUID called `document_uuid`
+* Handles File Upload to IPFS
+* Handles Temporary file deletions
+* Handles File Compression and Encryption
+* Handles Encryption key generation and Securing Encryption key in NFT 
+* Handles NFT minting in XRPL 
+* Handles KYC document verification using [https://www.idanalyzer.com] api.
+* Handles KYC document encryption and NFT minting.
+
+
 ## Contributing
 If you would like to contribute to the project, please feel free to fork the repository and submit a pull request. Before submitting a pull request, please make sure that your changes are thoroughly tested and that they adhere to the project's coding standards.
+
 ## License
 This project is released under the MIT License. See the <b>LICENSE</b> file for more information.
+
 ## Credits
 This project was created by <b>Hubsecure Team</b>.
