@@ -1,6 +1,3 @@
-<a href="https://github.com/kholid060/MkDown2" target="_blank">
-![Github](https://img.shields.io/github/stars/kholid060/MkDown2)
-</a>
 
 # Hubsecure
 
@@ -17,9 +14,7 @@ The project relies on the following dependencies:
 To get started with the project, you will need to clone the repository and install the necessary dependencies. You can do this by running the following commands:
 
 ```
-git clone https://gitlab.com/mhubt/hubsecure-frontend-vue.git
-cd hubsecure-frontend-vue
-npm install
+
 
 ```
 Once you have installed the dependencies, you can start the development server by running the following command:
