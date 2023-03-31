@@ -37,6 +37,8 @@ services:
       dockerfile: frontend.dockerfile
     ports:
       - "80:80"
+    environment:
+      VUE_APP_BASE_URL: "http://127.0.0.1:8000/api/v1"
 
   app:
     build:
@@ -53,9 +55,20 @@ services:
       - php
       - redis
       - mysql
+      - mongodb
       - mailhog
       - xrpl_api
       - ipfs
+
+  mongodb:
+    container_name: mongodb
+    image: mongo:latest
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: root
+      MONGO_INITDB_DATABASE: local
+    ports:
+        - "27017:27017"
 
   mysql:
     image: mariadb:10.6
