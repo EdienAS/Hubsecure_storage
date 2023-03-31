@@ -31,6 +31,13 @@ services:
       - 5001:5001
       - 8080:8080
 
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: frontend.dockerfile
+    ports:
+      - "80:80"
+
   app:
     build:
       context: ./dockerfiles
