@@ -1,0 +1,196 @@
+<template>
+  <div>
+    <div v-if="!getShareDataResponse?.data?.items[0]?.data?.attributes?.token">
+      <form @submit.prevent="shareFolderSubmit" class="d-block text-center">
+        <!-- typeOfFile :: start -->
+        <b-list-group-item class="d-flex align-items-center">
+          <b-avatar style="background-color: white !important" src="http://localhost:8080/img/folder.eb585fb1.png" size="3rem" class="mr-3" square rounded="lg"></b-avatar>
+          <div>
+            <strong
+              ><span class="d-flex">{{ fc.name }}</span></strong
+            >
+            <div class="d-flex">
+              <span> [0] Folders, </span>
+              <span> [0] Files</span>
+            </div>
+          </div>
+        </b-list-group-item>
+        <!-- typeOfFile :: end -->
+
+        <!-- permission :: start -->
+        <div class="mx-auto">
+          <p class="text-left">Permission:</p>
+          <b-form-select id="permission" type="permission" name="permission" @input="validate('permission')" v-model="values.permission" :options="permissionOptions"></b-form-select>
+        </div>
+        <!-- permission :: end -->
+
+        <!-- passwordProtected :: start -->
+        <div class="mx-auto my-4">
+          <p class="text-left">Password Protected:</p>
+          <small v-if="errors.password" class="myerror">{{ errors.password }}</small>
+          <div class="d-flex justify-content-between align-items-center">
+            <small>Protect your item by your custom password.</small>
+            <b-form-checkbox size="lg" v-model="values.isPassword" name="check-button" switch></b-form-checkbox>
+          </div>
+          <div v-if="values.isPassword" class="mt-3">
+            <div class="d-flex justify-content-around">
+              <b-form-input id="password" type="password" name="password" @input="validate('password')" v-model="values.password" placeholder="Type your password" autofocus></b-form-input>
+            </div>
+          </div>
+        </div>
+        <!-- passwordProtected :: end -->
+
+        <!-- expiration :: start -->
+        <div class="mx-auto">
+          <p class="text-left">Expiration:</p>
+          <small v-if="errors.expiration" class="myerror">{{ errors.expiration }}</small>
+          <div class="d-flex justify-content-between align-items-center">
+            <small>Your link expire after exact period of time.</small>
+            <b-form-checkbox size="lg" v-model="expirationToggleTwo" name="check-button" switch></b-form-checkbox>
+          </div>
+          <div v-if="expirationToggleTwo" class="mt-3">
+            <div class="d-flex justify-content-around">
+              <b-form-radio-group @input="validate('expiration')" v-model="values.expiration" :options="expiryOptions" class="mb-3" type="btn" value-field="item" text-field="name"></b-form-radio-group>
+            </div>
+          </div>
+        </div>
+        <!-- expiration :: end -->
+
+        <!-- sendLinkByEmail :: start -->
+        <div class="mx-auto my-4">
+          <p class="text-left">Send link by Email:</p>
+          <small v-if="errors.emails" class="myerror">{{ errors.emails?.length !== 0 ? errors.emails : "Please enter email" }}</small>
+          <div class="d-flex justify-content-between align-items-center">
+            <small>Send your share link via email to many recipients.</small>
+            <b-form-checkbox size="lg" v-model="expirationToggleThree" name="check-button" switch></b-form-checkbox>
+          </div>
+          <div v-if="expirationToggleThree" class="mt-3">
+            <div class="d-flex justify-content-around">
+              <b-form-tags @input="validate('emails')" input-id="tags-basic" v-model="values.emails" placeholder="Type your email"></b-form-tags>
+            </div>
+          </div>
+        </div>
+        <!-- sendLinkByEmail :: end -->
+
+        <!-- ctaButtons :: start -->
+        <div class="d-flex justify-content-around my-4">
+          <b-button class="btn btn-info w-100 mx-2">Cancel</b-button>
+          <b-button type="submit" class="btn btn-success w-100 mx-2">Generate Link</b-button>
+        </div>
+        <!-- ctaButtons :: end -->
+      </form>
+    </div>
+    <div v-else>
+      <p><i class="ri-share-forward-box-fill"></i> <b>Share your folder</b></p>
+      <div>
+        <p>Get your link</p>
+        <input style="width: 100%" type="text" ref="sharelink" v-model="getShareDataResponse.data.items[0].data.attributes.link" />
+      </div>
+      <div class="d-flex justify-content-between my-3">
+        <button class="btn btn-success" @click="copyToClipboard(getShareDataResponse.data.items[0].data.attributes.link)">Copy Link To Clipboard</button>
+        <button class="btn btn-danger" @click="$emit('close')">close</button>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+import { mapActions, mapGetters } from "vuex";
+import * as yup from "yup";
+
+const shareFolderSchema = yup.object({
+  uuid: yup.string().required(),
+  item_uuid: yup.string().required(),
+  type: yup.string().required(),
+  emails: yup.array().of(yup.string().email().required()).required(),
+  permission: yup.string().required(),
+  isPassword: yup.string().required(),
+  password: yup.string().required(),
+  expiration: yup.string().required(),
+});
+
+export default {
+  name: "HbShareModal",
+  props: {
+    fc: {
+      type: Object,
+      required: true,
+    },
+  },
+  data() {
+    return {
+      isTokenGenerated: false,
+      permissionOptions: [
+        { value: "visitor", text: "Can only view and download" },
+        { value: "editor", text: "Can edit and upload files" },
+      ],
+      expiryOptions: [
+        { item: "1", name: "1hr" },
+        { item: "2", name: "2hr" },
+        { item: "3", name: "3hr" },
+      ],
+      values: {
+        uuid: "uuid",
+        item_uuid: this.$options?.propsData?.fc?.uuid,
+        type: "folder",
+        emails: [],
+        permission: "visitor",
+        isPassword: false,
+        password: null,
+        expiration: "",
+      },
+      errors: {
+        uuid: "",
+        item_uuid: "",
+        type: "",
+        emails: [],
+        permission: "",
+        isPassword: "",
+        password: "",
+        expiration: "",
+      },
+      expirationToggleTwo: false,
+      expirationToggleThree: false,
+    };
+  },
+  computed: {
+    ...mapGetters("Share", ["getShareDataResponse"]),
+  },
+  methods: {
+    ...mapActions("Share", ["shareFolderByIdAn"]),
+    copyToClipboard(text) {
+      navigator.clipboard.writeText(text);
+    },
+    shareFolderSubmit() {
+      console.log("share modal submitted");
+      shareFolderSchema
+        .validate(this.values, { abortEarly: false })
+        .then(() => {
+          this.errors = {};
+          this.shareFolderByIdAn(this.values);
+        })
+        .catch((err) => {
+          err.inner.forEach((error) => {
+            this.errors[error.path] = error.message;
+          });
+        });
+    },
+    validate(field) {
+      shareFolderSchema
+        .validateAt(field, this.values)
+        .then(() => {
+          this.errors[field] = "";
+        })
+        .catch((err) => {
+          this.errors[field] = err.message;
+        });
+    },
+  },
+};
+</script>
+
+<style>
+.myerror {
+  color: red !important;
+}
+</style>

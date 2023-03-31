@@ -1,0 +1,66 @@
+.profile-icon.iq-icon-box {
+	height: 58px;
+	width: 58px;
+	line-height: 58px;
+	text-align: center;
+	margin-right: 10px;
+	font-size: 26px;
+	text-decoration: none;
+}
+
+.profile-overly {
+	position: absolute;
+	left: auto;
+	bottom: 0;
+	right: 0;
+	background: $white;
+	padding: 10px 30px;
+	text-align: center;
+	border-radius: 10px 10px 0 0;
+}
+ul.iq-contact-rest {
+	li {
+		a {
+			p {
+				word-break: break-all;
+			}
+		}
+	}
+}
+.crm-profile-img-edit {
+	.file-upload {
+		display: none;
+	}
+
+}
+
+.crm-p-image {
+	position: absolute;
+	top: auto;
+	left: 69px;
+	bottom: -9px;
+	transition: all .3s cubic-bezier(.175, .885, .32, 1.275);
+	@if $enable-rounded == true {
+		@include radius-mixin($border-radius-circle);
+	}
+	height: 35px;
+	width: 35px;
+	text-align: center;
+	font-size: 12px;
+	cursor: pointer;
+	border:5px solid $white;
+	.upload-button {
+		font-size: 13px;
+		line-height: 26px;
+	}
+}
+
+
+
+@media(max-width:479px) {
+    .profile-overly {
+        h3{
+            font-size: 14px;
+        }
+    }
+}

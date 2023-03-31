@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <link rel='icon' href="<%= BASE_URL %>favicon.ico">
+    <title><%= htmlWebpackPlugin.options.title %></title>
+    <!--PDF--> 
+    <link rel="stylesheet" href="<%= BASE_URL %>doc-viewer/include/pdf/pdf.viewer.css">
+    <!--Docs-->
+    <!--PPTX-->
+    <link rel="stylesheet" href="<%= BASE_URL %>doc-viewer/include/PPTXjs/css/pptxjs.css">
+    <link rel="stylesheet" href="<%= BASE_URL %>doc-viewer/include/PPTXjs/css/nv.d3.min.css">
+    <!--All Spreadsheet -->
+    <link rel="stylesheet" href="<%= BASE_URL %>doc-viewer/include/SheetJS/handsontable.full.min.css">
+    <!--Image viewer-->
+    <link rel="stylesheet" href="<%= BASE_URL %>doc-viewer/include/verySimpleImageViewer/css/jquery.verySimpleImageViewer.css">
+    <!--officeToHtml-->
+    <link rel="stylesheet" href="<%= BASE_URL %>doc-viewer/include/officeToHtml/officeToHtml.css">
+  </head>
+  <body>
+    <noscript>
+      <strong>We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
+    </noscript>
+    <div id="app"></div>
+    <script src="<%= BASE_URL %>js/jquery-3.5.1.min.js"></script>
+    <script src="<%= BASE_URL %>js/jquery.magnific-popup.min.js"></script>
+    <!--PDF-->
+    <script src="<%= BASE_URL %>doc-viewer/include/pdf/pdf.js"></script>
+    <!--Docs-->
+    <script src="<%= BASE_URL %>doc-viewer/include/docx/jszip-utils.js"></script>
+    <script src="<%= BASE_URL %>doc-viewer/include/docx/mammoth.browser.min.js"></script>
+    <!--PPTX-->
+    <script src="<%= BASE_URL %>doc-viewer/include/PPTXjs/js/filereader.js"></script>
+    <script src="<%= BASE_URL %>doc-viewer/include/PPTXjs/js/d3.min.js"></script>
+    <script src="<%= BASE_URL %>doc-viewer/include/PPTXjs/js/nv.d3.min.js"></script>
+    <script src="<%= BASE_URL %>doc-viewer/include/PPTXjs/js/pptxjs.js"></script>
+    <script src="<%= BASE_URL %>doc-viewer/include/PPTXjs/js/divs2slides.js"></script>
+    <!--All Spreadsheet -->
+    <script src="<%= BASE_URL %>doc-viewer/include/SheetJS/handsontable.full.min.js"></script>
+    <script src="<%= BASE_URL %>doc-viewer/include/SheetJS/xlsx.full.min.js"></script>
+    <!--Image viewer-->
+    <script src="<%= BASE_URL %>doc-viewer/include/verySimpleImageViewer/js/jquery.verySimpleImageViewer.js"></script>
+    <!--officeToHtml-->
+    <script src="<%= BASE_URL %>doc-viewer/include/officeToHtml/officeToHtml.js"></script>
+  </body>
+</html>
