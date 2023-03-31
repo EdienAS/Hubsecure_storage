@@ -1,0 +1,1 @@
+require('masonry-layout/masonry')

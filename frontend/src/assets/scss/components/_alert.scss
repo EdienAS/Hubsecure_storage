@@ -1,0 +1,131 @@
+// @each $color, $value in $theme-colors {
+// 	.alert-#{$color} {
+// 		@include custom-alert-mixin($value, lighten($value, 1%), 1);
+// 	}
+// }
+
+.alert-primary {
+	color: darken($primary, 10%);
+	border-color: darken($primary, 10%);
+	background-color: rgba($primary-light, 0.1);
+	.alert-link {
+		color: darken($primary, 20%);
+	}
+}
+.alert-secondary {
+	color: darken($secondary, 10%);
+	border-color: darken($secondary, 10%);
+	background-color: rgba($secondary-light, 0.1);
+	.alert-link {
+		color: darken($secondary, 20%);
+	}
+}
+.dark {
+	.alert-secondary {
+		color: lighten($secondary, 10%);
+		border-color: darken($secondary, 10%);
+		background-color: rgba($secondary-light, 0.1);
+		.alert-link {
+			color: lighten($secondary, 20%);
+		}
+	}
+}
+.alert-success {
+	color: darken($success, 10%);
+	border-color: darken($success, 10%);
+	background-color: rgba($success-light, 0.1);
+	.alert-link {
+		color: darken($success, 20%);
+	}
+}
+.alert-danger {
+	color: darken($danger, 10%);
+	border-color: darken($danger, 10%);
+	background-color: rgba($danger-light, 0.1);
+	.alert-link {
+		color: darken($danger, 20%);
+	}
+}
+.alert-warning {
+	color: darken($warning, 10%);
+	border-color: darken($warning, 10%);
+	background-color: rgba($warning-light, 0.1);
+	.alert-link {
+		color: darken($warning, 20%);
+	}
+}
+.alert-info {
+	color: darken($info, 10%);
+	border-color: darken($info, 10%);
+	background-color: rgba($info-light, 0.1);
+	.alert-link {
+		color: darken($info, 20%);
+	}
+}
+.alert-light {
+	color: darken($secondary, 10%);
+	border-color: darken($secondary, 10%);
+	background-color: rgba($light, 0.1);
+	.alert-link {
+		color: darken($light, 20%);
+	}
+}
+.dark {
+	.alert-light {
+		color: lighten($secondary, 10%);
+		border-color: darken($secondary, 10%);
+		background-color: rgba($light, 0.1);
+		.alert-link {
+			color: darken($light, 20%);
+		}
+	}
+}
+.alert {
+	display: -webkit-box;
+	display: -ms-flexbox;
+	display: flex;
+	-webkit-box-align: stretch;
+	-ms-flex-align: stretch;
+	align-items: stretch;
+	.iq-alert-icon {
+		display: -webkit-box;
+		display: -ms-flexbox;
+		display: flex;
+		-webkit-box-align: center;
+		-ms-flex-align: center;
+		align-items: center;
+		padding: 0 1.30rem 0 0;
+		i {
+			font-size: 2.441em;
+			line-height: normal;
+		}
+	}
+	.iq-alert-text {
+		-ms-flex-item-align: center;
+		align-self: center;
+		-webkit-box-flex: 1;
+		-ms-flex-positive: 1;
+		flex-grow: 1;
+	}
+	.close {
+		float: right;
+		font-size: 20px;
+		font-weight: 400;
+		line-height: 1;
+		color: $white;
+		text-shadow: none;
+		opacity: 1;
+	}
+}
+.close {
+	&:not(:disabled) {
+		&:not(.disabled) {
+			&:focus {
+				outline: none;
+			}
+			&:hover {
+				outline: none;
+			}
+		}
+	}
+}

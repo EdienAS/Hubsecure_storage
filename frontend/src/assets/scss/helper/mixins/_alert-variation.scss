@@ -1,0 +1,5 @@
+@mixin custom-alert-mixin ($color, $color-light, $opecity) {
+    color: $color;
+	border-color: $color;
+	background-color: rgba($color-light, $opecity);
+}

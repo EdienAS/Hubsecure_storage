@@ -1,0 +1,47 @@
+[
+  {
+    "name": "home",
+    "title": "Dashboard",
+    "short_title": "Home",
+    "href": "backend/index",
+    "link": {
+      "name": "layout.dashboard"
+    },
+    "icon_class": "las ri-dashboard-fill iq-arrow-left"
+  },
+  {
+    "name": "drive",
+    "title": "My Drive",
+    "short_title": "drive",
+    "href": "#drive",
+    "link": {
+      "name": ""
+    },
+    "class_name": "",
+    "icon_class": "las ri-folder-5-fill",
+    "expanded_icon_class": "las la-angle-down iq-arrow-right arrow-hover",
+    "collapse_icon_class": "las la-angle-right iq-arrow-right arrow-active",
+    "children": [
+      {
+        "name": "filebrowser",
+        "title": "Drive",
+        "href": "backend/MyDrive/FileBrowser",
+        "link": {
+          "name": "drive.filebrowser"
+        },
+        "class_name": "",
+        "icon_class": "ri-checkbox-blank-circle-fill"
+      }
+    ]
+  },
+  {
+    "name": "trash",
+    "title": "Trash",
+    "short_title": "trash",
+    "href": "backend/trash",
+    "link": {
+      "name": "layout.trash"
+    },
+    "icon_class": "las ri-delete-bin-7-fill iq-arrow-left"
+  }
+]
