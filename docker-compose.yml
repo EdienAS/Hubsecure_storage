@@ -1,0 +1,133 @@
+version: "3"
+
+services:
+  xrpl_api:
+    build:
+      context: xrpl_api
+      dockerfile: ../xrpl_api.dockerfile
+    container_name: xrpl_api
+    image: xrpl_api:latest
+    restart: unless-stopped
+    ports:
+      - 8005:8000
+    volumes:
+      - type: bind
+        source: ./xrpl_api
+        target: /app/
+
+  ipfs:
+    image: ipfs/kubo
+    container_name: xrpl_ipfs
+    restart: unless-stopped
+    volumes:
+      - ipfs_path:/data/ipfs
+      - ipfs_fuse:/ipfs
+      - ipns_fuse:/ipns
+    environment:
+      - IPFS_PATH=/data/ipfs
+    ports:
+      - 4001:4001/tcp
+      - 4001:4001/udp
+      - 5001:5001
+      - 8080:8080
+
+  app:
+    build:
+      context: ./dockerfiles
+      dockerfile: nginx.dockerfile
+      args:
+        - UID=${UID:-1000}
+        - GID=${GID:-1000}
+    ports:
+      - "8000:80"
+    volumes:
+      - ./kyc_app:/var/www/html:delegated
+    depends_on:
+      - php
+      - redis
+      - mysql
+      - mailhog
+      - xrpl_api
+      - ipfs
+
+  mysql:
+    image: mariadb:10.6
+    restart: unless-stopped
+    container_name: mysql
+    tty: true
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_DATABASE: local
+      MYSQL_USER: local
+      MYSQL_PASSWORD: local
+      MYSQL_ROOT_PASSWORD: secret
+      SERVICE_TAGS: dev
+      SERVICE_NAME: mysql
+
+  php:
+    build:
+      context: ./dockerfiles
+      dockerfile: php.dockerfile
+      args:
+        - UID=${UID:-1000}
+        - GID=${GID:-1000}
+    ports:
+      - "9000:9000"
+    volumes:
+      - ./kyc_app:/var/www/html:delegated
+
+  redis:
+    image: redis:alpine
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+
+  composer:
+    build:
+      context: ./dockerfiles
+      dockerfile: php.dockerfile
+      args:
+        - UID=${UID:-1000}
+        - GID=${GID:-1000}
+    volumes:
+      - ./kyc_app:/var/www/html
+    depends_on:
+      - php
+    entrypoint: ["composer", "--ignore-platform-reqs"]
+
+  npm:
+    image: node:current-alpine
+    volumes:
+      - ./kyc_app:/var/www/html
+    ports:
+      - "3000:3000"
+      - "3001:3001"
+      - "5173:5173"
+    working_dir: /var/www/html
+    entrypoint: ["npm"]
+
+  artisan:
+    build:
+      context: ./dockerfiles
+      dockerfile: php.dockerfile
+      args:
+        - UID=${UID:-1000}
+        - GID=${GID:-1000}
+    volumes:
+      - ./kyc_app:/var/www/html:delegated
+    depends_on:
+      - mysql
+    entrypoint: ["php", "/var/www/html/artisan"]
+
+  mailhog:
+    image: mailhog/mailhog:latest
+    ports:
+      - "1025:1025"
+      - "8025:8025"
+
+
+volumes:
+  ipfs_path:
+  ipfs_fuse:
+  ipns_fuse:

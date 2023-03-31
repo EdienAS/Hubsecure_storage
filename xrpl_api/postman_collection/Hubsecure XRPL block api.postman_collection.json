@@ -1,0 +1,512 @@
+{
+	"info": {
+		"_postman_id": "c074d690-b7e2-4b51-88aa-2056e7f49fbe",
+		"name": "Hubsecure XRPL block api",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "119199"
+	},
+	"item": [
+		{
+			"name": "Upload Document",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "files",
+							"type": "file",
+							"src": "/Users/arizawan/Desktop/DDD/2_mb_pdf.pdf"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{url}}/block/upload",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"block",
+						"upload"
+					]
+				},
+				"description": "Initiate a Document Upload"
+			},
+			"response": [
+				{
+					"name": "Default",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"application\" : {\n        \"app_encryption_key\" : \"32 char encryption key\"\n    },\n    \"client\" : {\n        \"client_encryption_key\" : \"client key\"\n    },\n    \"document\" : {\n        \"file_name\" : \"Test PDF File\",\n        \"file_extention\" : \"pdf\",\n        \"file_mime\" : \"application/pdf\"\n    }\n}"
+						},
+						"url": {
+							"raw": "{{url}}/block/upload",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"block",
+								"upload"
+							]
+						}
+					},
+					"code": 200,
+					"_postman_previewlanguage": null,
+					"header": null,
+					"cookie": [],
+					"body": "{\n    \"status\" : \"processing\",\n    \"block_uuid\" : \"59caa40d-5c92-43ca-a382-02099bd4f9ec\"\n}"
+				}
+			]
+		},
+		{
+			"name": "Create Block",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"application\" : {\n        \"app_encryption_key\" : \"SaOMTDoNigGV//4yirHCQUNDktGqW86+\"\n    },\n    \"client\" : {\n        \"client_encryption_key\" : \"GHIM KLUORDS MCDOOTTS THRANT SCHLOEB\",\n        \"client_wallet_seed\" : \"sEdTsxgEsgatzanLPKA6vJcTeFwSom2\",\n        \"client_wallet_seq\" : \"36191320\"\n    },\n    \"document_uuid\" :\"ef68812a-c47f-11ed-9916-0242ac140002\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/block/create",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"block",
+						"create"
+					]
+				},
+				"description": "Initiate a Document Upload"
+			},
+			"response": [
+				{
+					"name": "Default",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"application\" : {\n        \"app_encryption_key\" : \"32 char encryption key\"\n    },\n    \"client\" : {\n        \"client_encryption_key\" : \"client key\"\n    },\n    \"document\" : {\n        \"file_name\" : \"Test PDF File\",\n        \"file_extention\" : \"pdf\",\n        \"file_mime\" : \"application/pdf\"\n    }\n}"
+						},
+						"url": {
+							"raw": "{{url}}/block/upload",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"block",
+								"upload"
+							]
+						}
+					},
+					"code": 200,
+					"_postman_previewlanguage": null,
+					"header": null,
+					"cookie": [],
+					"body": "{\n    \"status\" : \"processing\",\n    \"block_uuid\" : \"59caa40d-5c92-43ca-a382-02099bd4f9ec\"\n}"
+				}
+			]
+		},
+		{
+			"name": "Get Block Status",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{url}}/block/status/e9a2479c-c47c-11ed-a5fd-0242ac140002",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"block",
+						"status",
+						"e9a2479c-c47c-11ed-a5fd-0242ac140002"
+					]
+				},
+				"description": "Get block status (Processing)"
+			},
+			"response": [
+				{
+					"name": "Default",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{url}}/block/status/UUID",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"block",
+								"status",
+								"UUID"
+							]
+						}
+					},
+					"code": 200,
+					"_postman_previewlanguage": null,
+					"header": null,
+					"cookie": [],
+					"body": "{\n    \"status\" : \"processing\",\n    \"block_uuid\" : \"59caa40d-5c92-43ca-a382-02099bd4f9ec\"\n}"
+				}
+			]
+		},
+		{
+			"name": "Get Document",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"block_uuid\" : \"e9a2479c-c47c-11ed-a5fd-0242ac140002\",\n    \"application\" : {\n        \"app_encryption_key\" : \"SaOMTDoNigGV//4yirHCQUNDktGqW86+\"\n    },\n    \"client\" : {\n        \"client_encryption_key\" : \"GHIM KLUORDS MCDOOTTS THRANT SCHLOEB\"\n    }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/block/document",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"block",
+						"document"
+					]
+				},
+				"description": "Get block status (Processing)"
+			},
+			"response": [
+				{
+					"name": "Default",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{url}}/block/status/UUID",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"block",
+								"status",
+								"UUID"
+							]
+						}
+					},
+					"code": 200,
+					"_postman_previewlanguage": null,
+					"header": null,
+					"cookie": [],
+					"body": "{\n    \"status\" : \"processing\",\n    \"block_uuid\" : \"59caa40d-5c92-43ca-a382-02099bd4f9ec\"\n}"
+				}
+			]
+		},
+		{
+			"name": "Download Document Once",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{url}}/download/once/67462498-c478-11ed-9a35-acde48001122",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"download",
+						"once",
+						"67462498-c478-11ed-9a35-acde48001122"
+					]
+				},
+				"description": "Get block status (Processing)"
+			},
+			"response": [
+				{
+					"name": "Default",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{url}}/block/status/UUID",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"block",
+								"status",
+								"UUID"
+							]
+						}
+					},
+					"code": 200,
+					"_postman_previewlanguage": null,
+					"header": null,
+					"cookie": [],
+					"body": "{\n    \"status\" : \"processing\",\n    \"block_uuid\" : \"59caa40d-5c92-43ca-a382-02099bd4f9ec\"\n}"
+				}
+			]
+		},
+		{
+			"name": "Generate Test Wallet",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{url}}/test/test_wallet",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"test",
+						"test_wallet"
+					]
+				},
+				"description": "Get block status (Unfinished)"
+			},
+			"response": [
+				{
+					"name": "Default",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{url}}/block/status/UUID",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"block",
+								"status",
+								"UUID"
+							]
+						}
+					},
+					"code": 200,
+					"_postman_previewlanguage": null,
+					"header": null,
+					"cookie": [],
+					"body": "{\n    \"status\" : \"unfinished\",\n    \"error\" : {},\n    \"block_uuid\" : \"59caa40d-5c92-43ca-a382-02099bd4f9ec\"\n}"
+				}
+			]
+		},
+		{
+			"name": "Get Wallet Details",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{url}}/xrp/get_wallet_details/rJNt157SFDu4Y5Jp8GipvdEzrXerF8rwMV",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"xrp",
+						"get_wallet_details",
+						"rJNt157SFDu4Y5Jp8GipvdEzrXerF8rwMV"
+					]
+				},
+				"description": "Get block status (Unfinished)"
+			},
+			"response": [
+				{
+					"name": "Default",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{url}}/block/status/UUID",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"block",
+								"status",
+								"UUID"
+							]
+						}
+					},
+					"code": 200,
+					"_postman_previewlanguage": null,
+					"header": null,
+					"cookie": [],
+					"body": "{\n    \"status\" : \"unfinished\",\n    \"error\" : {},\n    \"block_uuid\" : \"59caa40d-5c92-43ca-a382-02099bd4f9ec\"\n}"
+				}
+			]
+		},
+		{
+			"name": "Generate Application Key",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{url}}/gen/key/application",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"gen",
+						"key",
+						"application"
+					]
+				},
+				"description": "Get block status (Unfinished)"
+			},
+			"response": [
+				{
+					"name": "Default",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{url}}/block/status/UUID",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"block",
+								"status",
+								"UUID"
+							]
+						}
+					},
+					"code": 200,
+					"_postman_previewlanguage": null,
+					"header": null,
+					"cookie": [],
+					"body": "{\n    \"status\" : \"unfinished\",\n    \"error\" : {},\n    \"block_uuid\" : \"59caa40d-5c92-43ca-a382-02099bd4f9ec\"\n}"
+				}
+			]
+		},
+		{
+			"name": "Generate Client Key",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{url}}/gen/key/client",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"gen",
+						"key",
+						"client"
+					]
+				},
+				"description": "Get block status (Unfinished)"
+			},
+			"response": [
+				{
+					"name": "Default",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{url}}/block/status/UUID",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"block",
+								"status",
+								"UUID"
+							]
+						}
+					},
+					"code": 200,
+					"_postman_previewlanguage": null,
+					"header": null,
+					"cookie": [],
+					"body": "{\n    \"status\" : \"unfinished\",\n    \"error\" : {},\n    \"block_uuid\" : \"59caa40d-5c92-43ca-a382-02099bd4f9ec\"\n}"
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "url",
+			"value": "https://aeb3d28a-c3c3-4269-b8c7-e416173127f9.mock.pstmn.io"
+		}
+	]
+}
