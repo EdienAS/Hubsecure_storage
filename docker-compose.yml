@@ -41,7 +41,7 @@ services:
     ports:
       - "8000:80"
     volumes:
-      - ./kyc_app:/var/www/html:delegated
+      - ./storage_app:/var/www/html:delegated
     depends_on:
       - php
       - redis
@@ -75,7 +75,7 @@ services:
     ports:
       - "9000:9000"
     volumes:
-      - ./kyc_app:/var/www/html:delegated
+      - ./storage_app:/var/www/html:delegated
 
   redis:
     image: redis:alpine
@@ -91,7 +91,7 @@ services:
         - UID=${UID:-1000}
         - GID=${GID:-1000}
     volumes:
-      - ./kyc_app:/var/www/html
+      - ./storage_app:/var/www/html
     depends_on:
       - php
     entrypoint: ["composer", "--ignore-platform-reqs"]
@@ -99,7 +99,7 @@ services:
   npm:
     image: node:current-alpine
     volumes:
-      - ./kyc_app:/var/www/html
+      - ./storage_app:/var/www/html
     ports:
       - "3000:3000"
       - "3001:3001"
@@ -115,7 +115,7 @@ services:
         - UID=${UID:-1000}
         - GID=${GID:-1000}
     volumes:
-      - ./kyc_app:/var/www/html:delegated
+      - ./storage_app:/var/www/html:delegated
     depends_on:
       - mysql
     entrypoint: ["php", "/var/www/html/artisan"]
@@ -125,7 +125,6 @@ services:
     ports:
       - "1025:1025"
       - "8025:8025"
-
 
 volumes:
   ipfs_path:
