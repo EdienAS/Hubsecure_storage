@@ -68,7 +68,9 @@ Frontend handled everything about generating View.
 
 #### Technology Used :
 
-* Vue.Js
+* Vue.Js [required v2.x.x]
+* Vuex [required v3.x.x]
+* Vue-Router [required v3.x.x]
 * JavaScript
 * CSS
 * HTML
@@ -76,7 +78,10 @@ Frontend handled everything about generating View.
 #### What Pages are Implemented?
 
 * --
-
+1. Authentication Pages including SignIn, SignUp
+2. My Drive page to list all the folders and files
+3. Dashboard page to view recent folders and files
+4. Trash page to view trashed folders and files
 ___
 
 ### Deployment
