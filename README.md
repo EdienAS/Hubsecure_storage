@@ -121,10 +121,10 @@ ___
 
 ###  PHPMyAdmin
 
-**URL** : http://localhost:8081
-**Server** : mysql
-**Username** : local
-**Password** : local
+* **URL** : http://localhost:8081
+* **Server** : mysql
+* **Username** : local
+* **Password** : local
 
 ___
 
