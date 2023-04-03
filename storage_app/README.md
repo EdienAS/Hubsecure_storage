@@ -1,4 +1,6 @@
 # Hubsecure-Backend API
+Backend APIs responds to the requests coming from Frontend. This APIs manages Hubsecure Database, User Data and Authentication, Files and Folders
+management. It Interacts with XRPL APIs to Upload/Download Files, requests Encryption/Decryption Keys and User XRPL Wallet Data.
 
 # Installation and Setup Guide
 ## Server Requirements
@@ -108,17 +110,17 @@ Edit below details with proper values in both the files
 - Edit Mail credentials
 - Add parameter FRONTEND_URL with corresponding value
 - Add XRPL Block parameters with corresponding value
--- XRPL_BLOCK_DOMAIN = "http://139.162.148.222:8005"
+-- XRPL_BLOCK_DOMAIN = "<XRPL_API_Domain>"
 -- XRPL_APP_ENCRYPTION_KEY
-**Note:** Generate XRPL_APP_ENCRYPTION_KEY by sending a GET request to http://139.162.148.222:8005/gen/key/application API.
+**Note:** Generate XRPL_APP_ENCRYPTION_KEY by sending a GET request to <XRPL_API_Domain>/gen/key/application API.
 - Add SCOUT_DRIVER parameter and set to 'database'
 
 - Generate below details for testing enviornment and add it into .env.testing file.
--- XRPL_BLOCK_DOMAIN = "http://139.162.148.222:8005"
+-- XRPL_BLOCK_DOMAIN = "<XRPL_API_Domain>"
 -- XRPL_APP_ENCRYPTION_KEY - Use previously generated app encryption key.
--- XRPL_CLIENT_ENCRYPTION_KEY: send a GET request to http://139.162.148.222:8005/gen/key/client API.
--- XRPL_CLIENT_WALLET_SEED: send a GET request to http://139.162.148.222:8005/test/test_wallet API and take the "seed" value.
--- XRPL_CLIENT_WALLET_SEQ: send a GET request to http://139.162.148.222:8005/test/test_wallet API and take the "seq" value.
+-- XRPL_CLIENT_ENCRYPTION_KEY: send a GET request to <XRPL_API_Domain>/gen/key/client API.
+-- XRPL_CLIENT_WALLET_SEED: send a GET request to <XRPL_API_Domain>/test/test_wallet API and take the "seed" value.
+-- XRPL_CLIENT_WALLET_SEQ: send a GET request to <XRPL_API_Domain>/test/test_wallet API and take the "seq" value.
 
 ### 6. Install Packages
 - Run `composer install`

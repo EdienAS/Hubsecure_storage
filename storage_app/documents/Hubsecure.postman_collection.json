@@ -7044,7 +7044,7 @@
 								{
 									"key": "tokens[0]",
 									"value": "iKMji0c3m4aJ8eVp",
-									"description": "Required.\nPass comma seperated tokens",
+									"description": "Required.\nPass tokens as an array",
 									"type": "text"
 								},
 								{

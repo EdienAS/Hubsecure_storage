@@ -54,11 +54,19 @@ Backend API helps with almost all requests coming from Frontend. It manages user
 
 #### What This API does not handle?
 
-* --
+* Files Compression, Minting and Upload to IPFS
+* Generation of Encryption/Decryption Key
+* Generation of Customer XRPL Wallet Data
 
 #### What This API does?
 
-* --
+* Handles Hubsecure Database management, i.e. Insert/Read/Update/Delete Database Records.
+* Handles requests coming from Frontend and return with appropriate responses.
+* Handles File Upload/Download by connecting with XRPL APIs
+* Handles Files and Folders management and Sharing
+* Handles Queues and Notification Broadcasting
+* Handles User Data and Authentication
+* Handles User Registration/Login
 
 ___
 
