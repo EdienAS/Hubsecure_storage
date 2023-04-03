@@ -76,14 +76,18 @@ Frontend handled everything about generating View.
 
 #### Technology Used :
 
-* Vue.Js
-* JavaScript
-* CSS
-* HTML
+* HTML & CSS
+* Javascript
+* Vue.Js [Required v2.x.x]
+* Vuex [Required v3.x.x]
+* Vue-Router [Required v3.x.x]
 
 #### What Pages are Implemented?
 
-* --
+* Authentication Pages including SignIn, SignUp
+* My Drive page to list all the folders and files
+* Dashboard page to view recent folders and files
+* Trash page to view trashed folders and files
 
 ___
 
@@ -102,6 +106,17 @@ $ chmod +x *.sh
 $ ./deploy.sh
 ```
 
+##### Stop Docker Containers
+
+```bash
+$ docker-compose down
+```
+
+##### Destroy Docker Containers with data
+
+```bash
+$ docker-compose down -v
+```
 ___
 
 ### Documentations
@@ -113,6 +128,21 @@ ___
 ##### Backend API
 
 [Backend API POSTMAN COLLECTION](https://github.com/EdienAS/Hubsecure_storage/tree/master/storage_app/documents)
+
+___
+
+###  PHPMyAdmin
+
+* **URL** : http://localhost:8081
+* **Server** : mysql
+* **Username** : local
+* **Password** : local
+
+___
+
+###  MongoEexpress
+
+**URL** : http://localhost:8082
 
 ___
 
