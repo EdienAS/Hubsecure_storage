@@ -94,6 +94,17 @@ $ chmod +x *.sh
 $ ./deploy.sh
 ```
 
+##### Stop Docker Containers
+
+```bash
+$ docker-compose down
+```
+
+##### Destroy Docker Containers with data
+
+```bash
+$ docker-compose down -v
+```
 ___
 
 ### Documentations
@@ -105,6 +116,21 @@ ___
 ##### Backend API
 
 [Backend API POSTMAN COLLECTION](https://github.com/EdienAS/Hubsecure_storage/tree/master/storage_app/documents)
+
+___
+
+###  PHPMyAdmin
+
+**URL** : http://localhost:8081
+**Server** : mysql
+**Username** : local
+**Password** : local
+
+___
+
+###  MongoEexpress
+
+**URL** : http://localhost:8082
 
 ___
 
