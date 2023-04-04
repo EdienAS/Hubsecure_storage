@@ -6,7 +6,7 @@ import axios from "axios";
 import router from "../../router";
 
 Vue.use(Vuex);
-const base_url = process.env.VUE_APP_BASE_URL;
+
 export default {
   namespaced: true,
   state: {
@@ -50,7 +50,7 @@ export default {
     HbLogInUserAn({ commit }, payload) {
       return new Promise((resolve, reject) => {
         axios
-          .post(`${base_url}/login`, payload)
+          .post(`${process.env.VUE_APP_BASE_URL}/login`, payload)
           .then((res) => {
             commit("HbSetUserMn", res.data.data);
             commit("HbSetToken", res.data.data.token);
@@ -89,7 +89,7 @@ export default {
     HbRegisterUserAn({ commit }, payload) {
       return new Promise((resolve, reject) => {
         axios
-          .post(`${base_url}/user/register`, payload)
+          .post(`${process.env.VUE_APP_BASE_URL}/user/register`, payload)
           .then((res) => {
             commit("HbSetUserMn", res.data.data);
             commit("HbSetToken", res.data.data.token);
@@ -128,7 +128,7 @@ export default {
     HbLogOutUserAn({ commit }) {
       return new Promise((resolve, reject) => {
         axios
-          .post(`${base_url}/logout`)
+          .post(`${process.env.VUE_APP_BASE_URL}/logout`)
           .then((res) => {
             if (res.status === 204) {
               commit("HbRemoveUserMn", "");
