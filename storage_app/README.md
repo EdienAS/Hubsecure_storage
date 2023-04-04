@@ -91,7 +91,7 @@ Set `755` permission (CHMOD) to these files and folders directory within all chi
 -- Testing Database
 
 ### 5. Create and Setup Enviornment Variable Files
-Copy .env.example file to .env and .env.testing
+Copy .env file to .env.testing
 
 Edit below details with proper values in both the files
 - App Name
@@ -123,8 +123,7 @@ Edit below details with proper values in both the files
 -- XRPL_CLIENT_WALLET_SEQ: send a GET request to <XRPL_API_Domain>/test/test_wallet API and take the "seq" value.
 
 ### 6. Install Packages
-- Run `composer install`
-- Run `composer update` (if any error occurs in previous command).
+- Run `composer update`
 
 ### 7. Generate Application Key
 - Run `php artisan key:generate`
