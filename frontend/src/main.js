@@ -16,7 +16,7 @@ import "sweetalert2/dist/sweetalert2.min.css";
 
 Vue.use(VueSweetalert2);
 
-Axios.defaults.baseURL = process.env.VUE_APP_BASE_URL;
+Axios.defaults.baseURL = process.env.VUE_APP_BACKEND_URL;
 
 import vClickOutside from "v-click-outside";
 

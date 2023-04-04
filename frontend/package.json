@@ -3,9 +3,9 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "serve": "serve -s dist -l 8080",
-    "dev": "vue-cli-service serve --mode development",
-    "build": "vue-cli-service build --mode production",
+    "serve": "serve -s dist",
+    "dev": "vue-cli-service serve",
+    "build": "vue-cli-service build",
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
@@ -39,7 +39,6 @@
     "ramda": "^0.27.1",
     "remixicon": "^2.5.0",
     "select2": "~4.0",
-    "serve": "^14.2.0",
     "smooth-scrollbar": "^8.5.2",
     "v-click-outside": "^3.2.0",
     "vue": "^2.6.11",
