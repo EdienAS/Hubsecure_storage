@@ -3,3 +3,5 @@ xrpl_api/helper/__pycache__
 
 frontend/node_modules
 storage_app/composer.lock
+xrpl_api/temp_files/metadata/testnet
+xrpl_api/temp_files

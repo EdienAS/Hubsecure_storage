@@ -1,40 +1,91 @@
-FROM php:8-fpm-alpine
+FROM php:8.1-fpm
 
-ARG UID
-ARG GID
+ENV USER=www
+ENV GROUP=www
 
-ENV UID=${UID}
-ENV GID=${GID}
+# Install system dependencies
+RUN apt-get update && apt-get install -y \
+    build-essential \
+    git \
+    curl \
+    libjpeg-dev \
+    libjpeg62-turbo-dev \
+    libmcrypt-dev \
+    libgd-dev \
+    jpegoptim optipng pngquant gifsicle \
+    libonig-dev \
+    libxml2-dev \
+    zip \
+    sudo \
+    unzip \
+    npm \
+    nodejs
 
-RUN mkdir -p /var/www/html
+RUN apt-get update && \
+    apt-get install --yes --force-yes \
+    cron g++ gettext libicu-dev openssl \
+    libc-client-dev libkrb5-dev  \
+    libxml2-dev libfreetype6-dev \
+    libgd-dev libmcrypt-dev bzip2 \
+    libbz2-dev libtidy-dev libcurl4-openssl-dev \
+    libz-dev libmemcached-dev libxslt-dev git-core libpq-dev \
+    libzip4 libzip-dev libwebp-dev
 
-WORKDIR /var/www/html
 
-COPY --from=composer:latest /usr/bin/composer /usr/local/bin/composer
+# PHP Configuration
+RUN docker-php-ext-install bcmath bz2 calendar  dba exif gettext iconv intl  soap tidy xsl zip &&\
+    docker-php-ext-install mysqli pgsql pdo pdo_mysql pdo_pgsql  &&\
+    docker-php-ext-configure gd --with-freetype --with-jpeg --with-webp &&\
+    docker-php-ext-install gd &&\
+    docker-php-ext-configure imap --with-kerberos --with-imap-ssl &&\
+    docker-php-ext-install imap &&\
+    docker-php-ext-configure hash --with-mhash &&\
+    pecl install xdebug && docker-php-ext-enable xdebug &&\
+    pecl install mongodb && docker-php-ext-enable mongodb &&\
+    pecl install redis && docker-php-ext-enable redis && \
+    curl -sS https://getcomposer.org/installer | php \
+            && mv composer.phar /usr/bin/composer
 
-# MacOS staff group's gid is 20, so is the dialout group in alpine linux. We're not using it, let's just remove it.
-RUN delgroup dialout
+# Imagemagick : install fails on 8.0
+RUN apt-get install --yes --force-yes libmagickwand-dev libmagickcore-dev
+RUN yes '' | pecl install -f imagick &&\
+    docker-php-ext-enable imagick
 
-RUN addgroup -g ${GID} --system laravel
-RUN adduser -G laravel --system -D -s /bin/sh -u ${UID} laravel
+# Clear cache
+RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 
-RUN sed -i "s/user = www-data/user = laravel/g" /usr/local/etc/php-fpm.d/www.conf
-RUN sed -i "s/group = www-data/group = laravel/g" /usr/local/etc/php-fpm.d/www.conf
-RUN echo "php_admin_flag[log_errors] = on" >> /usr/local/etc/php-fpm.d/www.conf
+# RUN apt-get update \
+#     && apt-get install -y --no-install-recommends openssl libssl-dev libcurl4-openssl-dev \
+#     && pecl install mongodb \
+#     && cp /usr/local/etc/php/php.ini-production /usr/local/etc/php/php.ini \
+#     && echo "extension=mongodb.so" >> /usr/local/etc/php/php.ini \
+#     && apt-get clean \
+#     && rm -rf /var/lib/apt/lists/*
 
-RUN docker-php-ext-install pdo pdo_mysql
+# Install PHP extensions
+RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath
 
-RUN mkdir -p /usr/src/php/ext/redis \
-    && curl -L https://github.com/phpredis/phpredis/archive/5.3.4.tar.gz | tar xvz -C /usr/src/php/ext/redis --strip 1 \
-    && echo 'redis' >> /usr/src/php-available-exts \
-    && docker-php-ext-install redis
+# # Install Postgre PDO
+# RUN apt-get update && apt-get install -y libpq-dev && docker-php-ext-install pdo pdo_pgsql
 
-RUN apk --update add --virtual build-dependencies build-base openssl-dev autoconf \
-  && pecl install mongodb \
-  && docker-php-ext-enable mongodb \
-  && apk del build-dependencies build-base openssl-dev autoconf \
-  && rm -rf /var/cache/apk/*
-    
-USER laravel
+# # Get latest Composer
+# COPY --from=composer:latest /usr/bin/composer /usr/local/bin/composer
 
-CMD ["php-fpm", "-y", "/usr/local/etc/php-fpm.conf", "-R"]
+# Setup working directory
+WORKDIR /var/www/
+
+# Create User and Group
+RUN groupadd -g 1000 ${GROUP} && useradd -u 1000 -ms /bin/bash -g ${GROUP} ${USER}
+
+# Grant Permissions
+RUN chown -R ${USER} /var/www
+
+# Select User
+USER ${USER}
+
+# Copy permission to selected user
+COPY --chown=${USER}:${GROUP} . .
+
+EXPOSE 9000
+
+CMD ["php-fpm"]

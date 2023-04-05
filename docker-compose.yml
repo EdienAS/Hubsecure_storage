@@ -53,10 +53,9 @@ services:
     ports:
       - "8000:80"
     volumes:
-      - ./storage_app:/var/www/html:delegated
+      - ./storage_app:/var/www:delegated
     depends_on:
       - php
-      - redis
       - mysql
       - mongodb
       - mailhog
@@ -70,8 +69,6 @@ services:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: root
       MONGO_INITDB_DATABASE: local
-    ports:
-      - "27017:27017"
 
   mongo-express:
     image: mongo-express
@@ -88,8 +85,6 @@ services:
     restart: unless-stopped
     container_name: mysql
     tty: true
-    ports:
-      - "3306:3306"
     environment:
       MYSQL_DATABASE: local
       MYSQL_USER: local
@@ -121,13 +116,8 @@ services:
     ports:
       - "9000:9000"
     volumes:
-      - ./storage_app:/var/www/html:delegated
-
-  redis:
-    image: redis:alpine
-    restart: unless-stopped
-    ports:
-      - "6379:6379"
+      - ./storage_app:/var/www:delegated
+      - ./storage_app/php.ini:/usr/local/etc/php/conf.d/local.ini
 
   composer:
     build:
@@ -137,7 +127,7 @@ services:
         - UID=${UID:-1000}
         - GID=${GID:-1000}
     volumes:
-      - ./storage_app:/var/www/html
+      - ./storage_app:/var/www
     depends_on:
       - php
     entrypoint: ["composer", "--ignore-platform-reqs"]
@@ -145,12 +135,12 @@ services:
   npm:
     image: node:current-alpine
     volumes:
-      - ./storage_app:/var/www/html
+      - ./storage_app:/var/www
     ports:
       - "3000:3000"
       - "3001:3001"
       - "5173:5173"
-    working_dir: /var/www/html
+    working_dir: /var/www
     entrypoint: ["npm"]
 
   artisan:
@@ -161,10 +151,11 @@ services:
         - UID=${UID:-1000}
         - GID=${GID:-1000}
     volumes:
-      - ./storage_app:/var/www/html:delegated
+      - ./storage_app:/var/www:delegated
     depends_on:
       - mysql
-    entrypoint: ["php", "/var/www/html/artisan"]
+      - mongodb
+    entrypoint: ["php", "/var/www/artisan"]
 
   mailhog:
     image: mailhog/mailhog:latest
