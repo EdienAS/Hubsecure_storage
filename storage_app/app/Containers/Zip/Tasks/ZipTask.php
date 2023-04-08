@@ -123,7 +123,7 @@ class ZipTask extends Task
                                 if (Storage::exists($filePath)) {
 
                                     // local disk
-                                    if (isStorageDriver('public')) {
+                                    if (isStorageDriver('local')) {
 
                                         $zip->add(Storage::path($filePath), $zipDestination);
                                     }

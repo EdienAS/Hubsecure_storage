@@ -5,6 +5,7 @@ namespace App\Containers\Files\Models;
 use Config;
 use App\Traits\UuidTrait;
 use Laravel\Scout\Searchable;
+use App\Traits\StorageDiskTrait;
 use Laravel\Passport\HasApiTokens;
 use Kyslik\ColumnSortable\Sortable;
 use Database\Factories\FileFactory;
@@ -23,7 +24,8 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class File extends Authenticatable
 {
-    use SoftDeletes, HasApiTokens, HasFactory, Notifiable, UuidTrait, Sortable, Searchable;
+    use SoftDeletes, HasApiTokens, HasFactory, Notifiable, UuidTrait, Sortable, 
+            Searchable, StorageDiskTrait;
 
     public ?string $sharedAccess = null;
     
@@ -129,8 +131,23 @@ class File extends Authenticatable
     {
         $thumbnail = null;
         if($this->attributes['type'] == "image"){
-            $thumbnail = array('sm' => Storage::url('/files/'.$this->attributes['user_id'].'/sm-'.$this->attributes['basename']),
-                'xs' => Storage::url('/files/'.$this->attributes['user_id'].'/xs-'.$this->attributes['basename']));
+            $thumbnail = array('sm' => route('getthumbnail', ['name' => 'sm-'.$this->attributes['basename']]),
+                'xs' => route('getthumbnail', ['name' => 'xs-'.$this->attributes['basename']]));
+        }
+        return $thumbnail;
+    }
+
+    /**
+     * Format shared file Thumbnail URL
+     */
+    public function getSharedThumbnailAttribute()
+    {
+        $thumbnail = null;
+        if($this->attributes['type'] == "image" && (!empty($this->shared->token) || !empty($this->parent->shared->token))){
+            $thumbnail = array('sm' => route('getsharedThumbnail', ['name' => 'sm-'.$this->attributes['basename'],
+                                                                    'shared' => !empty($this->shared->token) ? $this->shared->token : $this->parent->shared->token]),
+                'xs' => route('getsharedThumbnail', ['name' => 'xs-'.$this->attributes['basename'],
+                                                                    'shared' => !empty($this->shared->token) ? $this->shared->token : $this->parent->shared->token]));
         }
         return $thumbnail;
     }

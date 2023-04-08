@@ -6,13 +6,11 @@ use Tests\TestCase;
 use Laravel\Passport\Passport;
 use Illuminate\Http\UploadedFile;
 use App\Containers\User\Models\User;
-use Illuminate\Support\Facades\Http;
 use App\Containers\Files\Models\File;
 use Tests\Traits\UserSettingsTestData;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use App\Containers\XRPLBlock\Tasks\XRPLUpdateBlockStatusTask;
 
 class GetFileTest extends TestCase
 {
@@ -43,12 +41,6 @@ class GetFileTest extends TestCase
         
         $fileData = File::where('user_id', $user->id)->first();
 
-        sleep(60);
-        
-        resolve(XRPLUpdateBlockStatusTask::class)(array($fileData->xrplBlockDocument));
-                
-        sleep(2);
-        
         $response = $this->get($fileData->file_url);
 
         $response->assertStatus(200);

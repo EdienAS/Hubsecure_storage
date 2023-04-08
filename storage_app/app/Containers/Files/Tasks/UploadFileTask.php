@@ -6,6 +6,7 @@ use Auth;
 use Exception;
 use App\Abstracts\Task;
 use Illuminate\Support\Str;
+use App\Traits\StorageDiskTrait;
 use Illuminate\Support\Facades\DB;
 use App\Traits\UniqueItemNameTrait;
 use App\Containers\Files\Models\File;
@@ -13,9 +14,7 @@ use Illuminate\Support\Facades\Storage;
 use App\Containers\Folders\Models\Folder;
 use League\Flysystem\UnableToRetrieveMetadata;
 use App\Containers\Files\Resources\FileResource;
-use App\Containers\XRPLBlock\Tasks\XRPLCreateBlockTask;
 use App\Containers\Files\Tasks\StoreFileToLocalDiskTask;
-use App\Containers\XRPLBlock\Tasks\StoreFileXRPLBlockTask;
 use App\Containers\Files\Exceptions\UploadFileFailedException;
 
 /**
@@ -24,7 +23,7 @@ use App\Containers\Files\Exceptions\UploadFileFailedException;
  */
 class UploadFileTask extends Task
 {
-    use UniqueItemNameTrait;
+    use UniqueItemNameTrait, StorageDiskTrait;
     
 
     /**
@@ -32,28 +31,14 @@ class UploadFileTask extends Task
      */
     private $storeFileLocalTask;
        
-    /**
-     * @var  XRPLCreateBlockTask
-     */
-    private $xrplCreateBlockTask;
      
-    /**
-     * @var  StoreFileXRPLBlockTask
-     */
-    private $storeFileXRPLBlockTask;
-    
-    
     public function __construct(
         StoreFileToLocalDiskTask $storeFileLocalTask,
-        XRPLCreateBlockTask $xrplCreateBlockTask,
-        StoreFileXRPLBlockTask $storeFileXRPLBlockTask,
         public GetFileParentFolderId $getFileParentFolderId,
         public StoreExifDataTask $storeExifDataTask,
         public ProcessImageThumbnailTask $createImageThumbnailTask,
     ) {
         $this->storeFileLocalTask = $storeFileLocalTask;
-        $this->xrplCreateBlockTask = $xrplCreateBlockTask;
-        $this->storeFileXRPLBlockTask = $storeFileXRPLBlockTask;
     }
     
     /**
@@ -89,7 +74,7 @@ class UploadFileTask extends Task
                 $this->storeFileLocalTask->run($file, $user, $name);
                 
                 // Get local disk instance
-                $localDisk = Storage::disk('public');
+                $localDisk = $this->getStorageDisk();
 
                 // Get file path
                 $temp = (app()->environment() == 'testing') ? 'testing/' : null;
@@ -138,11 +123,6 @@ class UploadFileTask extends Task
                 }
                 $fileHash = hash('sha256', Storage::get($filePath));
                 
-                //XRPL Block
-                $xrplBlockDocument = $this->storeFileXRPLBlockTask->run($filePath);
-                
-                $localDisk->delete("files/$user->id/$name");
-
                 DB::beginTransaction();
 
                     $uploadedFile = File::create([
@@ -160,7 +140,6 @@ class UploadFileTask extends Task
                         'creator_id' => auth()->check() ? auth()->id() : $user->id,
                         'file_storage_option_id' => $user->userSettings->file_storage_option_id,
                         'file_hash' => $fileHash,
-                        'xrpl_block_document_id' => $xrplBlockDocument->id
                     ]);
 
                     if ($fileType === 'image') {
@@ -168,10 +147,6 @@ class UploadFileTask extends Task
                     }
 
                 DB::commit();
-                
-                
-                ($this->xrplCreateBlockTask)(array($uploadedFile->xrplBlockDocument));
-            
                 
                 $finalArray[] = new FileResource($uploadedFile);
             }

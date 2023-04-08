@@ -105,7 +105,8 @@ Edit below details with proper values in both the files
 -- MONGODB_DATABASE
 -- MONGODB_USERNAME
 -- MONGODB_PASSWORD
-- Set FILESYSTEM_DISK to 'public'
+- BROADCAST_DRIVER = database
+- Set FILESYSTEM_DISK to 'local'
 - Set QUEUE_CONNECTION to 'database'
 - Edit Mail credentials
 - Add parameter FRONTEND_URL with corresponding value
@@ -116,6 +117,7 @@ Edit below details with proper values in both the files
 - Add SCOUT_DRIVER parameter and set to 'database'
 
 - Generate below details for testing enviornment and add it into .env.testing file.
+-- BROADCAST_DRIVER = log
 -- XRPL_BLOCK_DOMAIN = "<XRPL_API_Domain>"
 -- XRPL_APP_ENCRYPTION_KEY - Use previously generated app encryption key.
 -- XRPL_CLIENT_ENCRYPTION_KEY: send a GET request to <XRPL_API_Domain>/gen/key/client API.

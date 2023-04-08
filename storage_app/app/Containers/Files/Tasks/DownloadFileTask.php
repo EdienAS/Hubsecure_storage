@@ -8,8 +8,8 @@ use App\Traits\XRPLBlockTrait;
 use Illuminate\Support\Facades\Http;
 use App\Containers\Files\Models\File;
 use Illuminate\Support\Facades\Storage;
-use App\Containers\UserSettings\Models\Usersetting;
 use App\Containers\Traffic\Actions\RecordDownloadAction;
+use App\Containers\Files\Exceptions\FileNotFoundException;
 use App\Containers\Files\Exceptions\GetFileFailedException;
 use App\Containers\XRPLBlock\Tasks\XRPLDownloadDocumentTask;
 

@@ -13,18 +13,17 @@ use App\Containers\Folders\Models\Folder;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
-class GenerateZipPubliclyTest extends TestCase
+class GetThumbnailSharedItemPubliclyTest extends TestCase
 {
     use RefreshDatabase, WithFaker, UserSettingsTestData, FolderTestData;
+    
     /**
-     * GenerateZipPubliclyTest.
+     * A basic feature test example.
      *
      * @return void
      */
-    public function test_generateZipPubliclyTest()
+    public function test_getThumbnailSharedItemPubliclyTest()
     {
-        $queryParams = null;
-        
         $user = Passport::actingAs(
             User::factory()->create()
         );
@@ -36,14 +35,11 @@ class GenerateZipPubliclyTest extends TestCase
         $folder = $this->post('api/v1/folder', $data);
         
         $folderData = Folder::where('uuid', $folder['data']['items'][0]['data']['uuid'])
-                ->select('id','uuid')->first();
-        
-        $queryParams .= $folderData->uuid . '|folder,';
+                ->select('id', 'uuid')->first();
         
         Storage::fake('local');
         
         $file[] = UploadedFile::fake()->image('avatar.jpg');
-//        $file[] = UploadedFile::fake()->createWithContent('document.pdf', 100);
         
         $uploadFileData = [
             'uuid'  =>  'uuid',
@@ -52,7 +48,7 @@ class GenerateZipPubliclyTest extends TestCase
         ];
         
         $file = $this->post('api/v1/upload/file', $uploadFileData);
-        
+
         $password = $this->faker->password;
         
         $shareItemData = [
@@ -61,29 +57,24 @@ class GenerateZipPubliclyTest extends TestCase
             'isPassword'  =>  1,
             'password'      =>  $password
         ];
-
-        $shareItemData['item_uuid']  =   $folderData->uuid;
-        $shareItemData['type']       =   'folder';
-        $shareItemData['permission'] =   'visitor';
+        
+        $shareItemData['item_uuid']  =   $file['data']['items'][0]['data']['uuid'];
+        $shareItemData['type']       =   'file';
 
         $sharedItem = $this->post('api/v1/share', $shareItemData);
-        
+
         $cookie = ['share_session' => json_encode([
                 'token'         => $sharedItem['data']['items'][0]['data']['attributes']['token'],
                 'authenticated' => true,
             ])];
         
+        $this->withUnencryptedCookies($cookie)
+                ->get($file['data']['items'][0]['data']['attributes']['thumbnail']['sm'])
+                ->assertStatus(200);
         
-        $fileData = array();
-        foreach($file['data']['items'] as $file){
-            $fileData[] = $file['data']['uuid'] . '|file';
-        }
-        
-        $queryParams .= implode(',' , $fileData);
-        
-        $response = $this->withUnencryptedCookies($cookie)
-                ->get('api/v1/sharing/zip/' . $sharedItem['data']['items'][0]['data']['attributes']['token'] . '?items=' . $queryParams);
+        $this->withUnencryptedCookies($cookie)
+                ->get($file['data']['items'][0]['data']['attributes']['thumbnail']['xs'])
+                ->assertStatus(200);
 
-        $response->assertStatus(200);
     }
 }
