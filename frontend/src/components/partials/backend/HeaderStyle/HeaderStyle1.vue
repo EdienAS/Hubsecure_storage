@@ -137,7 +137,7 @@
                           </div>
                           <div class="profile-detail mt-3">
                             <h5>
-                              <a href="@/app/user-profile-edit.html">{{ user?.name }}</a>
+                              <router-link :to="{ name: 'app.user-profile-edit' }">{{ user?.name }}</router-link>
                             </h5>
                             <p>{{ user?.email }}</p>
                           </div>
