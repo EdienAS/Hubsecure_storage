@@ -71,3 +71,32 @@ $router->get('usersettings/{uuid}', [
         'auth:api'
     ],
 ]);
+
+/**
+ * @SWG\Get(
+ *     path="/avatar/{name}",
+ *     security={{"Bearer":{}}},
+ *     summary="Get user avatar by name",
+ *     tags={"Avatar"},
+ *     description="Get user avatar",
+ *     operationId="userById",
+ *     produces={"application/json"},
+ *     @SWG\Parameter(
+ *         name="name",
+ *         in="path",
+ *         type="string",
+ *         required=true,
+ *         description="avatar name",
+ *     ),
+ *     @SWG\Response(
+ *         response=200,
+ *         description="successful operation",
+ *     ),
+ * )
+ */
+$router->get('avatar/{name}', [
+    'uses' => 'GetUserAvatar@get',
+    'middleware' => [
+        'auth:api'
+    ],
+])->name('getavatar');

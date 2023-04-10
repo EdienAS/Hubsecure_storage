@@ -6,6 +6,7 @@ use Illuminate\Console\Scheduling\Schedule;
 use App\Support\Scheduler\Actions\XRPLCreateBlockAction;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 use App\Support\Scheduler\Actions\XRPLGetBlockStatusAction;
+use App\Support\Scheduler\Actions\XRPLCreateClientKeyAction;
 use App\Support\Scheduler\Actions\DeleteExpiredShareLinksAction;
 
 class Kernel extends ConsoleKernel
@@ -22,6 +23,10 @@ class Kernel extends ConsoleKernel
         
         $schedule->call(
             fn () => resolve(DeleteExpiredShareLinksAction::class)()
+        )->everyMinute();
+
+        $schedule->call(
+            fn () => resolve(XRPLCreateClientKeyAction::class)()
         )->everyMinute();
 
 //        $schedule->call(

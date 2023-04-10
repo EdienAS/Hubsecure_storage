@@ -10,7 +10,7 @@ use Tests\Traits\UserSettingsTestData;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
-class UpdateUserSettingsTest extends TestCase
+class GetUserAvatarTest extends TestCase
 {
     use RefreshDatabase, WithFaker, UserSettingsTestData;
     /**
@@ -18,7 +18,7 @@ class UpdateUserSettingsTest extends TestCase
      *
      * @return void
      */
-    public function test_updateUserSettingsTest()
+    public function test_getUserAvatarTest()
     {
         $user = Passport::actingAs(
             User::factory()->create(['role_id' => 2])
@@ -33,11 +33,16 @@ class UpdateUserSettingsTest extends TestCase
             'avatar' => UploadedFile::fake()->image('avatar.jpg')
         ];
         
-            $this->userSettingsTestData($user->id);
+        $this->userSettingsTestData($user->id);
         
+        $this->patch('api/v1/usersettings/' . $uuid, $updateUserSettingsData);
         
-        $response = $this->patch('api/v1/usersettings/' . $uuid, $updateUserSettingsData);
+        $avatarUrl = User::where('uuid', $uuid)->first()->avatar_url;
         
-        $response->assertStatus(204);
+        foreach($avatarUrl as $url){
+            
+            $this->get($url)->assertStatus(200);
+        }
+
     }
 }

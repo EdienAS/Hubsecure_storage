@@ -130,9 +130,16 @@ class File extends Authenticatable
     public function getThumbnailAttribute()
     {
         $thumbnail = null;
+        $baseName = $this->attributes['basename'];
+        
         if($this->attributes['type'] == "image"){
-            $thumbnail = array('sm' => route('getthumbnail', ['name' => 'sm-'.$this->attributes['basename']]),
-                'xs' => route('getthumbnail', ['name' => 'xs-'.$this->attributes['basename']]));
+            $thumbnail = collect(config('filemanager.image_sizes.immediately'))
+                    ->mapWithKeys(function ($size) use ($baseName) {
+                    
+                    return [$size['name'] => route('getthumbnail', ['name' => "{$size['name']}-{$baseName}"])];
+                    
+                });
+                
         }
         return $thumbnail;
     }
@@ -143,11 +150,20 @@ class File extends Authenticatable
     public function getSharedThumbnailAttribute()
     {
         $thumbnail = null;
+        $baseName = $this->attributes['basename'];
+        
         if($this->attributes['type'] == "image" && (!empty($this->shared->token) || !empty($this->parent->shared->token))){
-            $thumbnail = array('sm' => route('getsharedThumbnail', ['name' => 'sm-'.$this->attributes['basename'],
-                                                                    'shared' => !empty($this->shared->token) ? $this->shared->token : $this->parent->shared->token]),
-                'xs' => route('getsharedThumbnail', ['name' => 'xs-'.$this->attributes['basename'],
-                                                                    'shared' => !empty($this->shared->token) ? $this->shared->token : $this->parent->shared->token]));
+            
+            $token = !empty($this->shared->token) ? $this->shared->token : $this->parent->shared->token;
+            
+            $thumbnail = collect(config('filemanager.image_sizes.immediately'))
+                    ->mapWithKeys(function ($size) use ($baseName, $token) {
+                    
+                    return [$size['name'] => route('getsharedThumbnail', ['name' => "{$size['name']}-{$baseName}",
+                                            'shared' => $token])];
+                    
+                });
+            
         }
         return $thumbnail;
     }

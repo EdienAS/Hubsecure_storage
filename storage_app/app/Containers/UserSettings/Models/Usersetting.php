@@ -2,6 +2,7 @@
 namespace App\Containers\UserSettings\Models;
 
 use App\Traits\UuidTrait;
+use App\Containers\User\Models\User;
 use Illuminate\Database\Eloquent\Model;
 use Database\Factories\UserSettingsFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -31,6 +32,7 @@ class Usersetting extends Model
         'user_id',
         'file_storage_option_id',
         'storage_limit_mb',
+        'avatar',
         'client_encryption_key',
         'client_wallet_seed',
         'client_wallet_seq',
@@ -50,5 +52,8 @@ class Usersetting extends Model
             $this->attributes['uuid'] = $this->generateUuid();
     }
     
+    public function user(){
     
+        return $this->hasOne(User::class, 'id', 'user_id');
+}
 }

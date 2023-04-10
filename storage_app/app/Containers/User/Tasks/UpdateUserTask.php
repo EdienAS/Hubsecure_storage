@@ -2,6 +2,7 @@
 
 namespace App\Containers\User\Tasks;
 
+use Hash;
 use App\Abstracts\Task;
 use Illuminate\Support\Facades\DB;
 use App\Containers\User\Models\User;
@@ -30,6 +31,7 @@ class UpdateUserTask extends Task
 
             $user = User::where('uuid',$uuid)->first();
             unset($data['uuid']);
+            $data['password'] = Hash::make($data['password']);
             
             $user->update($data);
 

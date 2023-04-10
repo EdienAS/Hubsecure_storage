@@ -43,8 +43,9 @@ class GetThumbnailTest extends TestCase
         
         $fileData = $this->get('api/v1/file/' . $fileUuid);
         
-        $this->get($fileData['data']['items'][0]['data']['attributes']['thumbnail']['sm'])->assertStatus(200);
+        foreach($fileData['data']['items'][0]['data']['attributes']['thumbnail'] as $url){
         
-        $this->get($fileData['data']['items'][0]['data']['attributes']['thumbnail']['xs'])->assertStatus(200);
+            $this->get($url)->assertStatus(200);
     }
+}
 }

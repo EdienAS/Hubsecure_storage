@@ -4,10 +4,16 @@ namespace App\Containers\UserSettings\UI\Api\Requests;
 
 use Auth;
 use Gate;
+use App\Abstracts\RequestHttp;
 use Illuminate\Foundation\Http\FormRequest;
 use Symfony\Component\HttpFoundation\Response;
+use App\Containers\UserSettings\Models\Usersetting;
 
-class UpdateUserSettingsRequest extends FormRequest
+/**
+ * Class GetUserAvatarRequest.
+ *
+ */
+class GetUserAvatarRequest extends FormRequest
 {
 
     /**
@@ -18,11 +24,7 @@ class UpdateUserSettingsRequest extends FormRequest
     public function rules()
     {
         return [
-            'uuid'      => 'required|uuid|exists:users,uuid',
-            'file_storage_option_id' => 'required|integer|in:1',
-            'storage_limit_mb' => 'integer',
-            'avatar' => 'file|mimes:jpg,jpeg,png',
-            '_method'   => 'required|in:patch'
+            'name'    => 'required|string', // url parameter
         ];
     }
 
@@ -35,23 +37,20 @@ class UpdateUserSettingsRequest extends FormRequest
     public function all($keys = null)
     {
         $data = parent::all($keys);
-        
-        $data['uuid'] = $this->route('uuid');
+        $data['name'] = $this->route('name');
         
         return $data;
     }
-
+    
     /**
-     * Determine if the user is authorized to make this request.
-     *
-     * @return bool
+     * @return mixed
      */
     public function authorize()
     {
-        abort_if(Gate::denies('user_settings_update'), Response::HTTP_FORBIDDEN, '403 Forbidden');   
+        abort_if(Gate::denies('user_settings_show'), Response::HTTP_FORBIDDEN, '403 Forbidden'); 
         
-        if((Auth::user()->role_id == 1 && Auth::user()->uuid != $this->route('uuid')) || 
-           (Auth::user()->uuid == $this->route('uuid') && !in_array('storage_limit_mb', parent::all()))){
+        if(Auth::user()->role_id == 1 || Auth::user()->id == Usersetting::
+                where('avatar', substr($this->route('name'), 3))->first()->user->id){
             return true;
         } else {
             abort(403, 'Unauthorized action.');

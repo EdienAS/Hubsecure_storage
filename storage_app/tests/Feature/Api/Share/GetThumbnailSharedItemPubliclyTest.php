@@ -68,13 +68,11 @@ class GetThumbnailSharedItemPubliclyTest extends TestCase
                 'authenticated' => true,
             ])];
         
+        foreach($file['data']['items'][0]['data']['attributes']['thumbnail'] as $url){
         $this->withUnencryptedCookies($cookie)
-                ->get($file['data']['items'][0]['data']['attributes']['thumbnail']['sm'])
+                ->get($url)
                 ->assertStatus(200);
+        }
         
-        $this->withUnencryptedCookies($cookie)
-                ->get($file['data']['items'][0]['data']['attributes']['thumbnail']['xs'])
-                ->assertStatus(200);
-
     }
 }
