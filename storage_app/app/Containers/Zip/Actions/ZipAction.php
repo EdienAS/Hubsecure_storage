@@ -95,7 +95,7 @@ class ZipAction extends Action
         }
         
         // Zip items
-        $zip = $this->zipTask->run($folders, $files);
+        $zip = $this->zipTask->run($folders, $files, $shared);
         
         if(!empty(auth()->id())){
             $recordUserId = auth()->id();

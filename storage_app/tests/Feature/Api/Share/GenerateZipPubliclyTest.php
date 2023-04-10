@@ -7,11 +7,13 @@ use Laravel\Passport\Passport;
 use Tests\Traits\FolderTestData;
 use Illuminate\Http\UploadedFile;
 use App\Containers\User\Models\User;
+use App\Containers\Files\Models\File;
 use Tests\Traits\UserSettingsTestData;
 use Illuminate\Support\Facades\Storage;
 use App\Containers\Folders\Models\Folder;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use App\Containers\XRPLBlock\Tasks\XRPLUpdateBlockStatusTask;
 
 class GenerateZipPubliclyTest extends TestCase
 {
@@ -40,7 +42,7 @@ class GenerateZipPubliclyTest extends TestCase
         
         $queryParams .= $folderData->uuid . '|folder,';
         
-        Storage::fake('local');
+//        Storage::fake('local');
         
         $file[] = UploadedFile::fake()->image('avatar.jpg');
 //        $file[] = UploadedFile::fake()->createWithContent('document.pdf', 100);
@@ -75,15 +77,30 @@ class GenerateZipPubliclyTest extends TestCase
         
         
         $fileData = array();
-        foreach($file['data']['items'] as $file){
-            $fileData[] = $file['data']['uuid'] . '|file';
+        foreach($file['data']['items'] as $singleFile){
+            $fileData[] = $singleFile['data']['uuid'] . '|file';
         }
         
         $queryParams .= implode(',' , $fileData);
         
-        $response = $this->withUnencryptedCookies($cookie)
-                ->get('api/v1/sharing/zip/' . $sharedItem['data']['items'][0]['data']['attributes']['token'] . '?items=' . $queryParams);
+        $this->withUnencryptedCookies($cookie)
+                ->get('api/v1/sharing/zip/' . $sharedItem['data']['items'][0]['data']['attributes']['token'] . '?items=' . $queryParams)
+                ->assertStatus(200);
 
-        $response->assertStatus(200);
+        $this->post('api/v1/xrpl/upload/' . $file['data']['items'][0]['data']['uuid']);
+        
+        $newFileData = File::where('user_id', $user->id)->first();
+        
+        sleep(30);
+        
+        resolve(XRPLUpdateBlockStatusTask::class)(array($newFileData->xrplBlockDocument));
+                
+        sleep(5);
+        
+        
+        $this->withUnencryptedCookies($cookie)
+                ->get('api/v1/sharing/zip/' . $sharedItem['data']['items'][0]['data']['attributes']['token'] . '?items=' . $queryParams)
+                ->assertStatus(200);
+        
     }
 }

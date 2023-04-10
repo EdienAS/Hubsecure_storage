@@ -38,20 +38,6 @@ class DownloadFileTask extends Task
             switch ($file->file_storage_option_id){
                 case 1:
 
-                    if(!empty($file->xrpl_block_document_id)){
-                        
-                        $response = resolve(XRPLDownloadDocumentTask::class)($file->xrplBlockDocument->uuid);
-                    
-                    //Download file from xrpl url once
-                    $url = $response['document']['dec_file_uri'];
-                    
-                    $tempFile = tempnam(sys_get_temp_dir(), $file->name);
-                    copy($url, $tempFile);
-                    
-                    $returnData = response()->download($tempFile, $file->name)->deleteFileAfterSend();
-                    
-                    } else {
-
                         // Get file path
                         $temp = (app()->environment() == 'testing') ? 'testing/' : null;
                         $filePath = $temp . "files/$file->user_id/$file->basename";
@@ -76,9 +62,24 @@ class DownloadFileTask extends Task
                         // Download file
                         $returnData = Storage::download($filePath, $fileName, $header);
 
-                    }
-                    
                     break;
+                    
+                case 2:
+                    
+                        $response = resolve(XRPLDownloadDocumentTask::class)($file->xrplBlockDocument->uuid);
+
+                        //Download file from xrpl url once
+                        $url = $response['document']['dec_file_uri'];
+
+                        $tempFile = tempnam(sys_get_temp_dir(), $file->name);
+                        copy($url, $tempFile);
+
+                        $returnData = response()->download($tempFile, $file->name)->deleteFileAfterSend();
+
+                    break;
+
+                default:
+                        abort(409, "Invalid storage option: " . $file->file_storage_option_id);
 
             }
                 

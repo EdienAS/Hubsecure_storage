@@ -11,6 +11,8 @@ use Tests\Traits\UserSettingsTestData;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use App\Containers\XRPLBlock\Tasks\XRPLUpdateBlockStatusTask;
+
 
 class GetFileTest extends TestCase
 {
@@ -28,7 +30,7 @@ class GetFileTest extends TestCase
         
         $this->userSettingsTestData($user->id);
         
-        Storage::fake('local');
+//        Storage::fake('local');
         
         $file[] = UploadedFile::fake()->createWithContent('document.pdf', 100);
         
@@ -37,12 +39,22 @@ class GetFileTest extends TestCase
             'files' =>  $file
         ];
         
-        $this->post('api/v1/upload/file', $uploadFileData);
+        $file = $this->post('api/v1/upload/file', $uploadFileData);
+        
+        $this->get($file['data']['items'][0]['data']['attributes']['file_url'])->assertStatus(200);
+
+        $this->post('api/v1/xrpl/upload/' . $file['data']['items'][0]['data']['uuid']);
         
         $fileData = File::where('user_id', $user->id)->first();
 
-        $response = $this->get($fileData->file_url);
+        sleep(30);
 
-        $response->assertStatus(200);
+        resolve(XRPLUpdateBlockStatusTask::class)(array($fileData->xrplBlockDocument));
+                
+        sleep(5);
+        
+        $this->get($fileData->file_url)->assertStatus(200);
+
+
     }
 }
