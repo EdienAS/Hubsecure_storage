@@ -872,3 +872,19 @@ if (! function_exists('store_avatar')) {
                 });
         }
     }
+
+if (! function_exists('split_name')) {
+    /**
+     * Split name for 2 parts
+     */
+    function split_name(string $name): array
+    {
+        $firstName = explode(' ', $name)[0];
+        $lastName = str_replace("$firstName ", '', $name);
+
+        return [
+            'first_name' => $firstName,
+            'last_name'  => $lastName !== $firstName ? $lastName : null,
+        ];
+    }
+}

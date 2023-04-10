@@ -91,11 +91,6 @@ class User extends Authenticatable
             $this->attributes['uuid'] = $this->generateUuid();
     }
 
-    public function sendPasswordResetNotification($token)
-    {
-        $this->notify(new ResetPassword($token));
-    }
-
     public function role()
     {
         return $this->hasOne(Role::class, 'id', 'role_id');

@@ -11931,6 +11931,49 @@
 					]
 				}
 			]
+		},
+		{
+			"name": "XRPL",
+			"item": [
+				{
+					"name": "Upload",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{authToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/api/v1/xrpl/upload/7adaf42c-8380-491e-b8fd-e79633b6271f",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"xrpl",
+								"upload",
+								"7adaf42c-8380-491e-b8fd-e79633b6271f"
+							]
+						},
+						"description": "Pass a valid file uuid"
+					},
+					"response": []
+				}
+			]
 		}
 	]
 }

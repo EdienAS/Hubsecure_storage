@@ -32,7 +32,6 @@ class UpdateUserTest extends TestCase
         
         $updateUserData = [
             'name' => $this->faker->firstName(),
-            'email' => $this->faker->email,
             'current_password' => $currentPassword,
             'password' => $newPassword,
             'password_confirmation' => $newPassword,

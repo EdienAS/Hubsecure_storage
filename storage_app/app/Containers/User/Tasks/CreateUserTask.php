@@ -61,11 +61,16 @@ class CreateUserTask extends Task
 
                 $user = User::create($data);
                     
+                // Split username
+                $name = split_name($data['name']);
+
                 $userSetting = array(
                     'uuid' => 'uuid',
                     'user_id' => $user->id,
                     'file_storage_option_id' => 1,
-                    'storage_limit_mb' => 100
+                    'storage_limit_mb' => 100,
+                    'first_name' => $name['first_name'],
+                    'last_name'  => $name['last_name']
                 );
                 
                 Usersetting::create($userSetting);
