@@ -427,5 +427,22 @@ export default {
           });
       });
     },
+    async secureWithXRPLAn({ commit }, file_uuid) {
+      return await new Promise((t, f) => {
+        commit("setHbLoader", true);
+        axios
+          .post(`/xrpl/upload/${file_uuid}`)
+          .then((res) => {
+            if (res.status === 200) {
+              commit("setHbLoader", false);
+            }
+            t(res);
+          })
+          .catch((e) => {
+            console.log("e", e);
+            f(e);
+          });
+      });
+    },
   },
 };

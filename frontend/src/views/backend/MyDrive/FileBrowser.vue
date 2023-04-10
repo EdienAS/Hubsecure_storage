@@ -74,7 +74,6 @@
                         <template v-slot:button-content>
                           <i class="ri-more-fill"></i>
                         </template>
-                        <b-dropdown-item><i class="ri-star-line mr-2"></i>Favourites</b-dropdown-item>
                         <b-dropdown-item><i class="ri-drag-move-2-line mr-2"></i>Move</b-dropdown-item>
                         <b-dropdown-item><i class="ri-user-add-fill mr-2"></i>Convert as Team Folder</b-dropdown-item>
                         <!-- <b-dropdown-item><i class="ri-upload-cloud-2-line mr-2"></i>File Request</b-dropdown-item> -->
@@ -120,6 +119,7 @@
                       <template v-slot:button-content>
                         <i class="ri-more-fill"></i>
                       </template>
+                      <b-dropdown-item @click="secureFileByIdFn(doc.data.uuid)"><i class="ri-file-shield-2-line"></i> Secure With XRPL</b-dropdown-item>
                       <b-dropdown-item @click="downloadFileById({ base_name: doc.data.attributes.basename, file_name: doc.data.attributes.name })"><i class="ri-download-2-fill mr-2"></i>Download</b-dropdown-item>
                       <b-dropdown-item @click="deleteFileByIdToTrash(doc.data.uuid)"><i class="ri-eye-fill mr-2"></i>Move To Trash</b-dropdown-item>
                       <b-dropdown-item @click="deleteFileByIdPermanently(doc.data.uuid)"><i class="ri-delete-bin-6-fill mr-2"></i>Delete Permanently</b-dropdown-item>
@@ -154,6 +154,7 @@
                         <template v-slot:button-content>
                           <i class="ri-more-fill"></i>
                         </template>
+                        <b-dropdown-item @click="secureFileByIdFn(doc.data.uuid)"><i class="ri-file-shield-2-line"></i> Secure With XRPL</b-dropdown-item>
                         <b-dropdown-item @click="downloadFileById({ base_name: doc.data.attributes.basename, file_name: doc.data.attributes.name })"><i class="ri-download-2-fill mr-2"></i>Download</b-dropdown-item>
                         <b-dropdown-item @click="deleteFileByIdToTrash(doc.data.uuid)"><i class="ri-eye-fill mr-2"></i>Move To Trash</b-dropdown-item>
                         <b-dropdown-item @click="deleteFileByIdPermanently(doc.data.uuid)"><i class="ri-delete-bin-6-fill mr-2"></i>Delete Permanently</b-dropdown-item>
@@ -192,6 +193,7 @@
                         <template v-slot:button-content>
                           <i class="ri-more-fill"></i>
                         </template>
+                        <b-dropdown-item @click="secureFileByIdFn(doc.data.uuid)"><i class="ri-file-shield-2-line"></i> Secure With XRPL</b-dropdown-item>
                         <b-dropdown-item @click="downloadFileById({ base_name: doc.data.attributes.basename, file_name: doc.data.attributes.name })"><i class="ri-download-2-fill mr-2"></i>Download</b-dropdown-item>
                         <b-dropdown-item @click="deleteFileByIdToTrash(doc.data.uuid)"><i class="ri-eye-fill mr-2"></i>Move To Trash</b-dropdown-item>
                         <b-dropdown-item @click="deleteFileByIdPermanently(doc.data.uuid)"><i class="ri-delete-bin-6-fill mr-2"></i>Delete Permanently</b-dropdown-item>
@@ -227,6 +229,7 @@
                       <template v-slot:button-content>
                         <i class="ri-more-fill"></i>
                       </template>
+                      <b-dropdown-item @click="secureFileByIdFn(doc.data.uuid)"><i class="ri-file-shield-2-line"></i> Secure With XRPL</b-dropdown-item>
                       <b-dropdown-item @click="downloadFileById({ base_name: doc.data.attributes.basename, file_name: doc.data.attributes.name })"><i class="ri-download-2-fill mr-2"></i>Download</b-dropdown-item>
                       <b-dropdown-item @click="deleteFileByIdToTrash(doc.data.uuid)"><i class="ri-eye-fill mr-2"></i>Move To Trash</b-dropdown-item>
                       <b-dropdown-item @click="deleteFileByIdPermanently(doc.data.uuid)"><i class="ri-delete-bin-6-fill mr-2"></i>Delete Permanently</b-dropdown-item>
@@ -260,6 +263,7 @@
                       <template v-slot:button-content>
                         <i class="ri-more-fill"></i>
                       </template>
+                      <b-dropdown-item @click="secureFileByIdFn(doc.data.uuid)"><i class="ri-file-shield-2-line"></i> Secure With XRPL</b-dropdown-item>
                       <b-dropdown-item @click="downloadFileById({ base_name: doc.data.attributes.basename, file_name: doc.data.attributes.name })"><i class="ri-download-2-fill mr-2"></i>Download</b-dropdown-item>
                       <b-dropdown-item @click="deleteFileByIdToTrash(doc.data.uuid)"><i class="ri-eye-fill mr-2"></i>Move To Trash</b-dropdown-item>
                       <b-dropdown-item @click="deleteFileByIdPermanently(doc.data.uuid)"><i class="ri-delete-bin-6-fill mr-2"></i>Delete Permanently</b-dropdown-item>
@@ -293,6 +297,7 @@
                       <template v-slot:button-content>
                         <i class="ri-more-fill"></i>
                       </template>
+                      <b-dropdown-item @click="secureFileByIdFn(doc.data.uuid)"><i class="ri-file-shield-2-line"></i> Secure With XRPL</b-dropdown-item>
                       <b-dropdown-item @click="downloadFileById({ base_name: doc.data.attributes.basename, file_name: doc.data.attributes.name })"><i class="ri-download-2-fill mr-2"></i>Download</b-dropdown-item>
                       <b-dropdown-item @click="deleteFileByIdToTrash(doc.data.uuid)"><i class="ri-eye-fill mr-2"></i>Move To Trash</b-dropdown-item>
                       <b-dropdown-item @click="deleteFileByIdPermanently(doc.data.uuid)"><i class="ri-delete-bin-6-fill mr-2"></i>Delete Permanently</b-dropdown-item>
@@ -326,6 +331,7 @@
                       <template v-slot:button-content>
                         <i class="ri-more-fill"></i>
                       </template>
+                      <b-dropdown-item @click="secureFileByIdFn(doc.data.uuid)"><i class="ri-file-shield-2-line"></i> Secure With XRPL</b-dropdown-item>
                       <b-dropdown-item @click="downloadFileById({ base_name: doc.data.attributes.basename, file_name: doc.data.attributes.name })"><i class="ri-download-2-fill mr-2"></i>Download</b-dropdown-item>
                       <b-dropdown-item @click="deleteFileByIdToTrash(doc.data.uuid)"><i class="ri-eye-fill mr-2"></i>Move To Trash</b-dropdown-item>
                       <b-dropdown-item @click="deleteFileByIdPermanently(doc.data.uuid)"><i class="ri-delete-bin-6-fill mr-2"></i>Delete Permanently</b-dropdown-item>
@@ -578,8 +584,12 @@ export default {
   methods: {
     ...mapMutations('Browser', ['toggleSidebar']),
     ...mapMutations('Share', ['resetShareDataDetails']),
-    ...mapActions('Browser', ['downloadFolderByIdAn', 'getSingleFolderDetailsAn', 'getSingleFileDetailsAn', 'getSingleFileDetailsAn', 'createFolderAn', 'getAllDocumentsAn', 'getDocDetailsAn', 'updateFolderNameAn', 'deleteFolderByIdToTrashAn', 'deleteFolderByIdPermanentlyAn', 'deleteFileByIdToTrash', 'deleteFileByIdPermanently', 'downloadFileById']),
+    ...mapActions('Browser', ['secureWithXRPLAn', 'downloadFolderByIdAn', 'getSingleFolderDetailsAn', 'getSingleFileDetailsAn', 'getSingleFileDetailsAn', 'createFolderAn', 'getAllDocumentsAn', 'getDocDetailsAn', 'updateFolderNameAn', 'deleteFolderByIdToTrashAn', 'deleteFolderByIdPermanentlyAn', 'deleteFileByIdToTrash', 'deleteFileByIdPermanently', 'downloadFileById']),
 
+
+  secureFileByIdFn(file_uuid){
+    this.secureWithXRPLAn(file_uuid);
+  },
   handleFileUpload(){
     console.log('No logic added yet');
   },
@@ -597,7 +607,6 @@ export default {
     this.$refs['right-menu'].show()
   },
   shareFolderByIdFn(folder_uuid){
-    console.log('shareFolderByIdFn Reached .!')
     this.$refs['sfm'].show();
     this.getSingleFolderDetailsAn(folder_uuid).then(()=>{
       let fData = this.getRightSideFolderDetail;
@@ -609,17 +618,10 @@ export default {
       }
     }).catch(e => console.log('e', e));
   },
-  editShareFolderByIdFn(share_data){
-    console.log('editShareFolderByIdFn Reached .!')
-    this.$refs['sfm2'].show();
-    this.fc = share_data;
-  },
   shareFileByIdFn(file_uuid){
-    console.log('shareFileByIdFn Reached .!')
     this.$refs['sfm'].show();
     this.getSingleFileDetailsAn(file_uuid).then(()=>{
       let fData = this.getRightSideFileDetail;
-      console.log('fData', fData);
       this.fc = {
         name: fData[0].data?.attributes?.name,
         items: fData[0].data?.attributes?.items,
@@ -628,8 +630,11 @@ export default {
       }
     }).catch(e => console.log('e', e));
   },
+  editShareFolderByIdFn(share_data){
+    this.$refs['sfm2'].show();
+    this.fc = share_data;
+  },
   editShareFileByIdFn(share_data){
-    console.log('editShareFileByIdFn Reached .!', share_data)
     this.$refs['sfm3'].show();
     this.fc = share_data;
   },
@@ -637,6 +642,7 @@ export default {
     this.$refs['sfm'].hide();
     this.resetShareDataDetails();
   },
+
   closeEditShareModal(){
     this.$refs['sfm2'].hide();
     this.getAllDocumentsAn();
@@ -647,6 +653,8 @@ export default {
     this.getAllDocumentsAn();
     this.resetShareDataDetails();
   },
+
+
   updateFolderFn(e, doc) {
     const payload = {
       newName: e,
@@ -654,6 +662,7 @@ export default {
     }
     this.updateFolderNameAn(payload)
   },
+
   async uploadDocs(event, id) {
 
     this.isFileUploading = true;
