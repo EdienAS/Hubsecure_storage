@@ -38,6 +38,12 @@
         </b-modal>
         <!-- editShareFolderModal :: start -->
 
+        <!-- editShareFileModal :: start -->
+        <b-modal ref="sfm3" centered hide-header hide-footer>
+          <HbEditFileShareModal :fc="fc" @close="closeEditFileShareModal" />
+        </b-modal>
+        <!-- editShareFileModal :: start -->
+
         <!-- rightClickMenu :: start -->
         <b-modal class="m-0 p-0" ref="right-menu" size="sm" centered hide-header hide-footer>
           <b-list-group class="list-group list-group-flush" v-if="!isFileUploading">
@@ -117,7 +123,8 @@
                       <b-dropdown-item @click="downloadFileById({ base_name: doc.data.attributes.basename, file_name: doc.data.attributes.name })"><i class="ri-download-2-fill mr-2"></i>Download</b-dropdown-item>
                       <b-dropdown-item @click="deleteFileByIdToTrash(doc.data.uuid)"><i class="ri-eye-fill mr-2"></i>Move To Trash</b-dropdown-item>
                       <b-dropdown-item @click="deleteFileByIdPermanently(doc.data.uuid)"><i class="ri-delete-bin-6-fill mr-2"></i>Delete Permanently</b-dropdown-item>
-                      <b-dropdown-item @click="shareFileByIdFn(doc.data.uuid)"><i class="ri-share-line mr-2"></i>{{ doc.data.relationships.shared ? "Edit Share" : "Share" }}</b-dropdown-item>
+                      <b-dropdown-item v-if="!doc.data.relationships.shared" @click="shareFileByIdFn(doc.data.uuid)"><i class="ri-share-line mr-2"></i>Share</b-dropdown-item>
+                      <b-dropdown-item v-if="doc.data.relationships.shared" @click="editShareFileByIdFn(doc.data.relationships.shared?.data?.attributes)"><i class="ri-share-line mr-2"></i>Edit Share</b-dropdown-item>
                     </b-dropdown>
                   </div>
                 </template>
@@ -150,7 +157,8 @@
                         <b-dropdown-item @click="downloadFileById({ base_name: doc.data.attributes.basename, file_name: doc.data.attributes.name })"><i class="ri-download-2-fill mr-2"></i>Download</b-dropdown-item>
                         <b-dropdown-item @click="deleteFileByIdToTrash(doc.data.uuid)"><i class="ri-eye-fill mr-2"></i>Move To Trash</b-dropdown-item>
                         <b-dropdown-item @click="deleteFileByIdPermanently(doc.data.uuid)"><i class="ri-delete-bin-6-fill mr-2"></i>Delete Permanently</b-dropdown-item>
-                        <b-dropdown-item @click="shareFileByIdFn(doc.data.uuid)"><i class="ri-share-line mr-2"></i>{{ doc.data.relationships.shared ? "Edit Share" : "Share" }}</b-dropdown-item>
+                        <b-dropdown-item v-if="!doc.data.relationships.shared" @click="shareFileByIdFn(doc.data.uuid)"><i class="ri-share-line mr-2"></i>Share</b-dropdown-item>
+                        <b-dropdown-item v-if="doc.data.relationships.shared" @click="editShareFileByIdFn(doc.data.relationships.shared?.data?.attributes)"><i class="ri-share-line mr-2"></i>Edit Share</b-dropdown-item>
                       </b-dropdown>
                     </div>
                   </div>
@@ -187,7 +195,8 @@
                         <b-dropdown-item @click="downloadFileById({ base_name: doc.data.attributes.basename, file_name: doc.data.attributes.name })"><i class="ri-download-2-fill mr-2"></i>Download</b-dropdown-item>
                         <b-dropdown-item @click="deleteFileByIdToTrash(doc.data.uuid)"><i class="ri-eye-fill mr-2"></i>Move To Trash</b-dropdown-item>
                         <b-dropdown-item @click="deleteFileByIdPermanently(doc.data.uuid)"><i class="ri-delete-bin-6-fill mr-2"></i>Delete Permanently</b-dropdown-item>
-                        <b-dropdown-item @click="shareFileByIdFn(doc.data.uuid)"><i class="ri-share-line mr-2"></i>{{ doc.data.relationships.shared ? "Edit Share" : "Share" }}</b-dropdown-item>
+                        <b-dropdown-item v-if="!doc.data.relationships.shared" @click="shareFileByIdFn(doc.data.uuid)"><i class="ri-share-line mr-2"></i>Share</b-dropdown-item>
+                        <b-dropdown-item v-if="doc.data.relationships.shared" @click="editShareFileByIdFn(doc.data.relationships.shared?.data?.attributes)"><i class="ri-share-line mr-2"></i>Edit Share</b-dropdown-item>
                       </b-dropdown>
                     </div>
                   </div>
@@ -221,7 +230,8 @@
                       <b-dropdown-item @click="downloadFileById({ base_name: doc.data.attributes.basename, file_name: doc.data.attributes.name })"><i class="ri-download-2-fill mr-2"></i>Download</b-dropdown-item>
                       <b-dropdown-item @click="deleteFileByIdToTrash(doc.data.uuid)"><i class="ri-eye-fill mr-2"></i>Move To Trash</b-dropdown-item>
                       <b-dropdown-item @click="deleteFileByIdPermanently(doc.data.uuid)"><i class="ri-delete-bin-6-fill mr-2"></i>Delete Permanently</b-dropdown-item>
-                      <b-dropdown-item @click="shareFileByIdFn(doc.data.uuid)"><i class="ri-share-line mr-2"></i>{{ doc.data.relationships.shared ? "Edit Share" : "Share" }}</b-dropdown-item>
+                      <b-dropdown-item v-if="!doc.data.relationships.shared" @click="shareFileByIdFn(doc.data.uuid)"><i class="ri-share-line mr-2"></i>Share</b-dropdown-item>
+                      <b-dropdown-item v-if="doc.data.relationships.shared" @click="editShareFileByIdFn(doc.data.relationships.shared?.data?.attributes)"><i class="ri-share-line mr-2"></i>Edit Share</b-dropdown-item>
                     </b-dropdown>
                   </div>
                 </div>
@@ -253,7 +263,8 @@
                       <b-dropdown-item @click="downloadFileById({ base_name: doc.data.attributes.basename, file_name: doc.data.attributes.name })"><i class="ri-download-2-fill mr-2"></i>Download</b-dropdown-item>
                       <b-dropdown-item @click="deleteFileByIdToTrash(doc.data.uuid)"><i class="ri-eye-fill mr-2"></i>Move To Trash</b-dropdown-item>
                       <b-dropdown-item @click="deleteFileByIdPermanently(doc.data.uuid)"><i class="ri-delete-bin-6-fill mr-2"></i>Delete Permanently</b-dropdown-item>
-                      <b-dropdown-item @click="shareFileByIdFn(doc.data.uuid)"><i class="ri-share-line mr-2"></i>{{ doc.data.relationships.shared ? "Edit Share" : "Share" }}</b-dropdown-item>
+                      <b-dropdown-item v-if="!doc.data.relationships.shared" @click="shareFileByIdFn(doc.data.uuid)"><i class="ri-share-line mr-2"></i>Share</b-dropdown-item>
+                      <b-dropdown-item v-if="doc.data.relationships.shared" @click="editShareFileByIdFn(doc.data.relationships.shared?.data?.attributes)"><i class="ri-share-line mr-2"></i>Edit Share</b-dropdown-item>
                     </b-dropdown>
                   </div>
                 </div>
@@ -285,7 +296,8 @@
                       <b-dropdown-item @click="downloadFileById({ base_name: doc.data.attributes.basename, file_name: doc.data.attributes.name })"><i class="ri-download-2-fill mr-2"></i>Download</b-dropdown-item>
                       <b-dropdown-item @click="deleteFileByIdToTrash(doc.data.uuid)"><i class="ri-eye-fill mr-2"></i>Move To Trash</b-dropdown-item>
                       <b-dropdown-item @click="deleteFileByIdPermanently(doc.data.uuid)"><i class="ri-delete-bin-6-fill mr-2"></i>Delete Permanently</b-dropdown-item>
-                      <b-dropdown-item @click="shareFileByIdFn(doc.data.uuid)"><i class="ri-share-line mr-2"></i>{{ doc.data.relationships.shared ? "Edit Share" : "Share" }}</b-dropdown-item>
+                      <b-dropdown-item v-if="!doc.data.relationships.shared" @click="shareFileByIdFn(doc.data.uuid)"><i class="ri-share-line mr-2"></i>Share</b-dropdown-item>
+                      <b-dropdown-item v-if="doc.data.relationships.shared" @click="editShareFileByIdFn(doc.data.relationships.shared?.data?.attributes)"><i class="ri-share-line mr-2"></i>Edit Share</b-dropdown-item>
                     </b-dropdown>
                   </div>
                 </div>
@@ -317,7 +329,8 @@
                       <b-dropdown-item @click="downloadFileById({ base_name: doc.data.attributes.basename, file_name: doc.data.attributes.name })"><i class="ri-download-2-fill mr-2"></i>Download</b-dropdown-item>
                       <b-dropdown-item @click="deleteFileByIdToTrash(doc.data.uuid)"><i class="ri-eye-fill mr-2"></i>Move To Trash</b-dropdown-item>
                       <b-dropdown-item @click="deleteFileByIdPermanently(doc.data.uuid)"><i class="ri-delete-bin-6-fill mr-2"></i>Delete Permanently</b-dropdown-item>
-                      <b-dropdown-item @click="shareFileByIdFn(doc.data.uuid)"><i class="ri-share-line mr-2"></i>{{ doc.data.relationships.shared ? "Edit Share" : "Share" }}</b-dropdown-item>
+                      <b-dropdown-item v-if="!doc.data.relationships.shared" @click="shareFileByIdFn(doc.data.uuid)"><i class="ri-share-line mr-2"></i>Share</b-dropdown-item>
+                      <b-dropdown-item v-if="doc.data.relationships.shared" @click="editShareFileByIdFn(doc.data.relationships.shared?.data?.attributes)"><i class="ri-share-line mr-2"></i>Edit Share</b-dropdown-item>
                     </b-dropdown>
                   </div>
                 </div>
@@ -541,6 +554,7 @@ import axios from 'axios';
 import { mapGetters, mapActions, mapMutations } from 'vuex';
 import HbShareModal from '@/components/HbComponents/HbModals/HbShareModal.vue'
 import HbEditShareModal from '@/components/HbComponents/HbModals/HbEditShareModal.vue';
+import HbEditFileShareModal from '@/components/HbComponents/HbModals/HbEditFileShareModal.vue';
 
 import Loader from '@/components/loader/HbLoader.vue';
 export default {
@@ -548,6 +562,7 @@ export default {
   components: {
     HbShareModal,
     HbEditShareModal,
+    HbEditFileShareModal,
     Loader
   },
   data() {
@@ -582,6 +597,7 @@ export default {
     this.$refs['right-menu'].show()
   },
   shareFolderByIdFn(folder_uuid){
+    console.log('shareFolderByIdFn Reached .!')
     this.$refs['sfm'].show();
     this.getSingleFolderDetailsAn(folder_uuid).then(()=>{
       let fData = this.getRightSideFolderDetail;
@@ -594,19 +610,12 @@ export default {
     }).catch(e => console.log('e', e));
   },
   editShareFolderByIdFn(share_data){
+    console.log('editShareFolderByIdFn Reached .!')
     this.$refs['sfm2'].show();
     this.fc = share_data;
-    // this.getSingleFolderDetailsAn(folder_uuid).then(()=>{
-    //   let fData = this.getRightSideFolderDetail;
-    //   this.fc = {
-    //     name: fData[0].data?.attributes?.name,
-    //     items: fData[0].data?.attributes?.items,
-    //     uuid: fData[0].data?.uuid,
-    //     type: 'folder'
-    //   }
-    // }).catch(e => console.log('e', e));
   },
   shareFileByIdFn(file_uuid){
+    console.log('shareFileByIdFn Reached .!')
     this.$refs['sfm'].show();
     this.getSingleFileDetailsAn(file_uuid).then(()=>{
       let fData = this.getRightSideFileDetail;
@@ -619,12 +628,23 @@ export default {
       }
     }).catch(e => console.log('e', e));
   },
+  editShareFileByIdFn(share_data){
+    console.log('editShareFileByIdFn Reached .!', share_data)
+    this.$refs['sfm3'].show();
+    this.fc = share_data;
+  },
   closeShareModal(){
     this.$refs['sfm'].hide();
     this.resetShareDataDetails();
   },
   closeEditShareModal(){
     this.$refs['sfm2'].hide();
+    this.getAllDocumentsAn();
+    this.resetShareDataDetails();
+  },
+  closeEditFileShareModal(){
+    this.$refs['sfm3'].hide();
+    this.getAllDocumentsAn();
     this.resetShareDataDetails();
   },
   updateFolderFn(e, doc) {

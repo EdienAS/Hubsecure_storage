@@ -170,13 +170,11 @@ export default {
     },
     async getSingleFolderDetailsAn({ commit }, folder_uuid) {
       return await new Promise((t, f) => {
-        commit("setHbLoader", true);
         axios
           .get(`/folder/${folder_uuid}`)
           .then((r) => {
             commit("resetRightSideBar", null);
             commit("setRightSideFolderDetail", r.data.data.items);
-            commit("setHbLoader", false);
             t(r);
           })
           .catch((e) => {
@@ -186,11 +184,9 @@ export default {
     },
     async getSingleFileDetailsAn({ commit }, file_uuid) {
       return await new Promise((t, f) => {
-        commit("setHbLoader", true);
         axios
           .get(`/file/${file_uuid}`)
           .then((r) => {
-            commit("setHbLoader", false);
             commit("resetRightSideBar", null);
             commit("setRightSideFileDetail", r.data.data.items);
             t(r);
