@@ -26,8 +26,8 @@
             <div class="iq-edit-list usr-edit">
               <tab-nav :pills="true" extraclass="iq-edit-profile d-flex">
                 <tab-nav-items :active="true" id="personal" dataToggle="pill" ariaControls="personal-information" title=" Profile Settings" liClass=" col-md-3 p-0" />
-                <tab-nav-items :active="false" id="chang" dataToggle="pill" ariaControls="chang-pwd" title=" Security & API" liClass=" col-md-3 p-0" />
-                <tab-nav-items :active="false" id="email" dataToggle="pill" ariaControls="emailandsms" title=" Storage" liClass=" col-md-3 p-0" />
+                <tab-nav-items :active="false" id="chang" dataToggle="pill" ariaControls="chang-pwd" title=" Security" liClass=" col-md-3 p-0" />
+                <!-- <tab-nav-items :active="false" id="email" dataToggle="pill" ariaControls="emailandsms" title=" Storage" liClass=" col-md-3 p-0" /> -->
                 <!-- <tab-nav-items :active="false" id="manage" dataToggle="pill" ariaControls="manage-contact" title=" Manage Contact" liClass=" col-md-3 p-0" /> -->
               </tab-nav>
             </div>
@@ -45,31 +45,33 @@
                   <div class="card">
                     <div class="card-header d-flex justify-content-between">
                       <div class="iq-header-title">
-                        <h4 class="card-title"><i class="ri-pencil-line"></i> Account Settings</h4>
+                        <h4 class="card-title"><i class="ri-pencil-line"></i> Profile Settings</h4>
                       </div>
                     </div>
-                    <div class="card-body">
-                      <div class="row align-items-center">
-                        <div class="form-group col-sm-6">
-                          <label for="fname">First Name:</label>
-                          <input disabled style="cursor: not-allowed" v-model="f_name" :placeholder="this.getUserDetails?.relationships?.settings?.data?.attributes?.first_name" type="text" class="form-control" id="fname" />
-                        </div>
-                        <div class="form-group col-sm-6">
-                          <label for="lname">Last Name:</label>
-                          <input disabled style="cursor: not-allowed" v-model="l_name" :placeholder="this.getUserDetails?.relationships?.settings?.data?.attributes?.last_name" type="text" class="form-control" id="lname" />
-                        </div>
-                        <div class="form-group col-sm-12">
-                          <label>GMT:</label>
-                          <select disabled style="cursor: not-allowed" class="form-control" id="exampleFormControlSelect4">
-                            <option>California</option>
-                            <option>Florida</option>
-                            <option selected="">Georgia</option>
-                            <option>Connecticut</option>
-                            <option>Louisiana</option>
-                          </select>
+                    <form>
+                      <div class="card-body">
+                        <div class="row align-items-center">
+                          <div class="form-group col-sm-6">
+                            <label for="fname">First Name:</label>
+                            <input v-model="f_name" :placeholder="this.getUserDetails?.relationships?.settings?.data?.attributes?.first_name" type="text" class="form-control" id="fname" />
+                          </div>
+                          <div class="form-group col-sm-6">
+                            <label for="lname">Last Name:</label>
+                            <input v-model="l_name" :placeholder="this.getUserDetails?.relationships?.settings?.data?.attributes?.last_name" type="text" class="form-control" id="lname" />
+                          </div>
+                          <div class="form-group col-sm-12">
+                            <label>GMT:</label>
+                            <select disabled style="cursor: not-allowed" class="form-control" id="exampleFormControlSelect4">
+                              <option>California</option>
+                              <option>Florida</option>
+                              <option selected="">Georgia</option>
+                              <option>Connecticut</option>
+                              <option>Louisiana</option>
+                            </select>
+                          </div>
                         </div>
                       </div>
-                    </div>
+                    </form>
                   </div>
                   <!-- accountSettings :: end -->
 
@@ -77,7 +79,7 @@
                   <div class="card">
                     <div class="card-header d-flex justify-content-between">
                       <div class="iq-header-title">
-                        <h4 class="card-title"><i class="ri-pencil-line"></i> Billing Information</h4>
+                        <h4 class="card-title"><i class="ri-pencil-line"></i> Address Information</h4>
                       </div>
                     </div>
                     <div class="card-body">
@@ -85,12 +87,11 @@
                         <div class="form-group col-sm-12">
                           <label>Address:</label>
                           <textarea disabled style="cursor: not-allowed; line-height: 22px" class="form-control" name="address" rows="5">
-                           37 Cardinal Lane
-                           Petersburg, VA 23803
-                           United States of America
-                           Zip Code: 85001
-                        </textarea
-                          >
+                             37 Cardinal Lane
+                             Petersburg, VA 23803
+                             United States of America
+                             Zip Code: 85001
+                          </textarea>
                         </div>
                         <div class="form-group col-sm-6">
                           <label for="cname">City:</label>
@@ -125,7 +126,7 @@
                           <input disabled style="cursor: not-allowed" type="text" class="form-control" id="pnumber" value="123456" />
                         </div>
                       </div>
-                      <button type="submit" class="btn btn-primary mr-2">Submit</button>
+                      <button type="submit" class="btn btn-primary mr-2" @click.prevent="updateUsername">Save</button>
                       <button type="reset" class="btn iq-bg-danger">Cancel</button>
                     </div>
                   </div>
@@ -167,8 +168,8 @@
             <!-- SecurityAndAPI :: end -->
 
             <!-- Storage :: start -->
-            <tab-content-item :active="false" id="emailandsms" aria-labelled-by="email">
-              <!-- <div class="card">
+            <!-- <tab-content-item :active="false" id="emailandsms" aria-labelled-by="email">
+             <div class="card">
                 <div class="card-header d-flex justify-content-between">
                   <div class="iq-header-title">
                     <h4 class="card-title">Email and SMS</h4>
@@ -228,8 +229,8 @@
                     <button type="reset" class="btn iq-bg-danger">Cancel</button>
                   </form>
                 </div>
-              </div> -->
-            </tab-content-item>
+              </div> 
+            </tab-content-item>-->
             <!-- Storage :: end -->
             <!-- <tab-content-item :active="false" id="manage-contact" aria-labelled-by="manage">
               <div class="card">
@@ -269,45 +270,60 @@
 import { mapGetters, mapActions } from 'vuex';
 import tabNav from '../../../../components/tab/tab-nav.vue'
 export default {
-   components: { tabNav },
-   name:'UserProfileEdit',
-   data(){
-      return {
-         f_name: '',
-         l_name: '',
-         current_password: '',
-         password: '',
-         password_confirmation: '',
-         selectedAvatar: null
+  components: { tabNav },
+  name: 'UserProfileEdit',
+  data() {
+    return {
+      f_name: '',
+      l_name: '',
+      current_password: '',
+      password: '',
+      password_confirmation: '',
+      selectedAvatar: null,
+      fullName: ''
+    }
+  },
+  computed: {
+    ...mapGetters('Auth', ['getUserDetails']),
+  },
+  methods: {
+    ...mapActions('Auth', ['HbGetLoggedInUserAn', 'HbSetNewPassword', 'HbChangeAvatar', 'HbUpdateProfile']),
+    updateUsername() {
+      if (this.f_name || this.l_name) {
+        this.fullName = this.f_name + this.l_name
+        const payload = {
+          _method: 'patch',
+          name: this.fullName,
+        }
+        this.HbSetNewPassword(payload);
       }
-   },
-   computed: {
-      ...mapGetters('Auth', ['getUserDetails']),
-   },
-   methods: {
-      ...mapActions('Auth', ['HbGetLoggedInUserAn', 'HbSetNewPassword', 'HbChangeAvatar']),
-      setNewPasswordFn(){
-         const payload = {
-            _method: 'patch',
-            current_password: this.current_password,
-            password: this.password,
-            password_confirmation: this.password_confirmation
-         }
-         this.HbSetNewPassword(payload);
-      },
-      selectNewAvatar(event){
-         this.selectedAvatar = event.target.files[0]
-         const fd = new FormData();
-         fd.append('_method', 'patch')
-         fd.append('uuid', 'uuid')
-         fd.append('file_storage_option_id', 1)
-         fd.append('storage_limit_mb', 102)
-         fd.append('avatar', this.selectedAvatar)
-         this.HbChangeAvatar(fd);
+    },
+    setNewPasswordFn() {
+      if (this.f_name || this.l_name) {
+        this.fullName = this.f_name + this.l_name;
       }
-   },
-   created(){
-      this.HbGetLoggedInUserAn();
-   }
+      const payload = {
+        _method: 'patch',
+        name: this.fullName ? this.fullName : '',
+        current_password: this.current_password,
+        password: this.password,
+        password_confirmation: this.password_confirmation
+      }
+      this.HbSetNewPassword(payload);
+    },
+    selectNewAvatar(event) {
+      this.selectedAvatar = event.target.files[0]
+      const fd = new FormData();
+      fd.append('_method', 'patch')
+      fd.append('uuid', 'uuid')
+      fd.append('file_storage_option_id', 1)
+      fd.append('storage_limit_mb', 102)
+      fd.append('avatar', this.selectedAvatar)
+      this.HbChangeAvatar(fd);
+    }
+  },
+  created() {
+    this.HbGetLoggedInUserAn();
+  }
 }
 </script>
