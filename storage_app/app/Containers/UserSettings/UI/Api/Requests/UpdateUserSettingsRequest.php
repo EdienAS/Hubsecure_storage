@@ -18,10 +18,18 @@ class UpdateUserSettingsRequest extends FormRequest
     public function rules()
     {
         return [
+            'user_id' => 'prohibited',
             'uuid'      => 'required|uuid|exists:users,uuid',
             'file_storage_option_id' => 'required|integer|in:1',
             'storage_limit_mb' => 'integer',
             'avatar' => 'file|mimes:jpg,jpeg,png',
+            'address' => 'string',
+            'state' => 'string',
+            'city' => 'string',
+            'postal_code' => 'integer',
+            'country' => 'string',
+            'phone_number' => 'string',
+            'timezone' => 'between:-12,12',
             '_method'   => 'required|in:patch'
         ];
     }

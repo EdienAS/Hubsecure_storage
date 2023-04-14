@@ -210,13 +210,13 @@
 							"formdata": [
 								{
 									"key": "email",
-									"value": "gaurav@edien.com",
+									"value": "test@test.com",
 									"description": "Pass a valid email addressq",
 									"type": "text"
 								},
 								{
 									"key": "password",
-									"value": "Gaurav@321",
+									"value": "test@123",
 									"description": "Pass a valid password",
 									"type": "text"
 								}
@@ -1458,6 +1458,48 @@
 									"key": "avatar",
 									"type": "file",
 									"src": "/C:/Users/SAKWE/Data/SampleFiles/Images/png/pngwing.com (5).png"
+								},
+								{
+									"key": "address",
+									"value": "Block 123, 45 Street ",
+									"description": "Optional. \nPass a valid string",
+									"type": "text"
+								},
+								{
+									"key": "city",
+									"value": "Mumbai",
+									"description": "Optional. \nPass a valid city name",
+									"type": "text"
+								},
+								{
+									"key": "state",
+									"value": "Maharastra",
+									"description": "Optional.\nPass a valid state name",
+									"type": "text"
+								},
+								{
+									"key": "postal_code",
+									"value": "123456",
+									"description": "Optional.\nPass a valid postal code",
+									"type": "text"
+								},
+								{
+									"key": "country",
+									"value": "India",
+									"description": "Optional.\nPass a valid country name",
+									"type": "text"
+								},
+								{
+									"key": "phone_number",
+									"value": "+91 9876543210",
+									"description": "Optional.\nPass a valid phone number",
+									"type": "text"
+								},
+								{
+									"key": "timezone",
+									"value": "5.30",
+									"description": "Optional.\nPass a decimal value of time zone\n",
+									"type": "text"
 								}
 							]
 						},

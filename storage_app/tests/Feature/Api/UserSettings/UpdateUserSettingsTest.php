@@ -30,7 +30,14 @@ class UpdateUserSettingsTest extends TestCase
             '_method' => 'patch',
             'uuid' => 'uuid',
             'file_storage_option_id' => 1,
-            'avatar' => UploadedFile::fake()->image('avatar.jpg')
+            'avatar' => UploadedFile::fake()->image('avatar.jpg'),
+            'address' => $this->faker->streetAddress(),
+            'city' => $this->faker->city(),
+            'state' => $this->faker->state(),
+            'postal_code' => rand(100000, 999999),
+            'country' => $this->faker->country(),
+            'phone_number' => $this->faker->e164PhoneNumber(),
+            'timezone' => rand(-12, 12)
         ];
         
             $this->userSettingsTestData($user->id);
