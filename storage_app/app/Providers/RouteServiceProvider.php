@@ -95,5 +95,7 @@ class RouteServiceProvider extends ServiceProvider
         
         $this->app->register(\App\Containers\Search\Providers\ContainerServiceProvider::class);
         
+        $this->app->register(\App\Containers\XRPLBlock\Providers\ContainerServiceProvider::class);
+        
     }
 }

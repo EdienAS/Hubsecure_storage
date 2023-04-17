@@ -7,6 +7,7 @@ use Gate;
 use App\Abstracts\RequestHttp;
 use Illuminate\Foundation\Http\FormRequest;
 use Symfony\Component\HttpFoundation\Response;
+use App\Containers\User\Rules\PasswordMatchWithCurrent;
 
 /**
  * @SWG\Definition(
@@ -41,11 +42,14 @@ class UpdateUserRequest extends FormRequest
             'created_at'            => 'prohibited',
             'updated_at'            => 'prohibited',
             'deleted_at'            => 'prohibited',
+            'email'                 => 'prohibited',
             'uuid'                  => 'required|uuid|exists:users,uuid',
             'name'                  => 'string',
-            'email'                 => 'email',
             'role_id'               => 'integer',
             'is_active'             => 'integer|in:0,1',
+            'current_password'               => ['required_with:password', 'string', new PasswordMatchWithCurrent()],
+            'password'              => 'string|min:6|confirmed',
+            'password_confirmation' => 'required_with:password',
             '_method'               => 'required|in:patch'
         ];
     }
