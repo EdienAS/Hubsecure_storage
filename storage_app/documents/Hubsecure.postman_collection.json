@@ -116,11 +116,10 @@
 									]
 								},
 								"url": {
-									"raw": "localhost:8000/api/v1/user/register",
+									"raw": "{{url}}/api/v1/user/register",
 									"host": [
-										"localhost"
+										"{{url}}"
 									],
-									"port": "8000",
 									"path": [
 										"api",
 										"v1",
@@ -201,7 +200,7 @@
 						"method": "POST",
 						"header": [
 							{
-								"key": "Content-Type",
+								"key": "Accept",
 								"value": "application/json",
 								"type": "default"
 							}
@@ -211,13 +210,13 @@
 							"formdata": [
 								{
 									"key": "email",
-									"value": "johndoe@mail.com",
+									"value": "test@test.com",
 									"description": "Pass a valid email addressq",
 									"type": "text"
 								},
 								{
 									"key": "password",
-									"value": "secretpassword",
+									"value": "test@123",
 									"description": "Pass a valid password",
 									"type": "text"
 								}
@@ -265,11 +264,10 @@
 									]
 								},
 								"url": {
-									"raw": "localhost:8000/api/v1/login",
+									"raw": "{{url}}/api/v1/login",
 									"host": [
-										"localhost"
+										"{{url}}"
 									],
-									"port": "8000",
 									"path": [
 										"api",
 										"v1",
@@ -373,15 +371,10 @@
 									}
 								],
 								"url": {
-									"raw": "http://139.162.148.222:8005/api/v1/logout",
-									"protocol": "http",
+									"raw": "{{url}}/api/v1/logout",
 									"host": [
-										"139",
-										"162",
-										"148",
-										"222"
+										"{{url}}"
 									],
-									"port": "8005",
 									"path": [
 										"api",
 										"v1",
@@ -654,7 +647,8 @@
 								{
 									"key": "name",
 									"value": "jenny doe",
-									"type": "text"
+									"type": "text",
+									"disabled": true
 								},
 								{
 									"key": "is_active",
@@ -662,11 +656,29 @@
 									"description": "Optional.\nPass this parameter is make user active/inactive\nActive - 1, Inactive - 0",
 									"type": "text",
 									"disabled": true
+								},
+								{
+									"key": "current_password",
+									"value": "Gaurav@4321",
+									"description": "Required if password is present.\nPass current password value",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "Gaurav@321",
+									"description": "Optional.\nMust be string with min 6 characters",
+									"type": "text"
+								},
+								{
+									"key": "password_confirmation",
+									"value": "Gaurav@321",
+									"description": "Required if password is present.",
+									"type": "text"
 								}
 							]
 						},
 						"url": {
-							"raw": "{{url}}/api/v1/user/1e38624b-22a1-4482-89b2-2aa7c2f2b906",
+							"raw": "{{url}}/api/v1/user/{{userUUID}}",
 							"host": [
 								"{{url}}"
 							],
@@ -674,7 +686,7 @@
 								"api",
 								"v1",
 								"user",
-								"1e38624b-22a1-4482-89b2-2aa7c2f2b906"
+								"{{userUUID}}"
 							]
 						},
 						"description": "Pass a valid user uuid in URL parameter."
@@ -927,7 +939,7 @@
 							}
 						],
 						"url": {
-							"raw": "{{url}}/api/v1/user/3253c336-25bd-487b-b2f0-c83f8a4dadd9",
+							"raw": "{{url}}/api/v1/user/{{userUUID}}",
 							"host": [
 								"{{url}}"
 							],
@@ -935,7 +947,7 @@
 								"api",
 								"v1",
 								"user",
-								"3253c336-25bd-487b-b2f0-c83f8a4dadd9"
+								"{{userUUID}}"
 							]
 						},
 						"description": "Pass a valid user uuid in URL parameter"
@@ -1438,8 +1450,55 @@
 								},
 								{
 									"key": "storage_limit_mb",
-									"value": "200",
+									"value": "102",
 									"description": "Required.\nPass integer value",
+									"type": "text"
+								},
+								{
+									"key": "avatar",
+									"type": "file",
+									"src": "/C:/Users/SAKWE/Data/SampleFiles/Images/png/pngwing.com (5).png"
+								},
+								{
+									"key": "address",
+									"value": "Block 123, 45 Street ",
+									"description": "Optional. \nPass a valid string",
+									"type": "text"
+								},
+								{
+									"key": "city",
+									"value": "Mumbai",
+									"description": "Optional. \nPass a valid city name",
+									"type": "text"
+								},
+								{
+									"key": "state",
+									"value": "Maharastra",
+									"description": "Optional.\nPass a valid state name",
+									"type": "text"
+								},
+								{
+									"key": "postal_code",
+									"value": "123456",
+									"description": "Optional.\nPass a valid postal code",
+									"type": "text"
+								},
+								{
+									"key": "country",
+									"value": "India",
+									"description": "Optional.\nPass a valid country name",
+									"type": "text"
+								},
+								{
+									"key": "phone_number",
+									"value": "+91 9876543210",
+									"description": "Optional.\nPass a valid phone number",
+									"type": "text"
+								},
+								{
+									"key": "timezone",
+									"value": "5.30",
+									"description": "Optional.\nPass a decimal value of time zone\n",
 									"type": "text"
 								}
 							]
@@ -1596,6 +1655,116 @@
 								"v1",
 								"usersettings",
 								"{{userUUID}}"
+							]
+						},
+						"description": "Pass a valid user uuid in URL parameter"
+					},
+					"response": [
+						{
+							"name": "Show",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "default"
+									}
+								],
+								"url": {
+									"raw": "{{url}}/api/v1/usersettings/{{userUUID}}",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"usersettings",
+										"{{userUUID}}"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Host",
+									"value": "localhost:8002"
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 23 Mar 2023 05:19:54 GMT"
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 23 Mar 2023 05:19:54 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "close"
+								},
+								{
+									"key": "X-Powered-By",
+									"value": "PHP/8.1.6"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, private"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "X-RateLimit-Limit",
+									"value": "60"
+								},
+								{
+									"key": "X-RateLimit-Remaining",
+									"value": "58"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"data\": {\n        \"uuid\": \"11bd16c4-ad03-422f-ad07-f5b4d38db449\",\n        \"user_id\": 1,\n        \"file_storage_option_id\": 1,\n        \"storage_limit_mb\": 200\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "Get Avatar",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{authToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "default"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/api/v1/avatar/md-1fca9a24-e41e-4c88-a54e-6a2f84bcbfdf.png",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"avatar",
+								"md-1fca9a24-e41e-4c88-a54e-6a2f84bcbfdf.png"
 							]
 						},
 						"description": "Pass a valid user uuid in URL parameter"
@@ -5067,6 +5236,36 @@
 					"response": []
 				},
 				{
+					"name": "Get Thumbnail",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{authToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/api/v1/getthumbnail/xs-d66f0cb6-7ad7-44d5-b88d-1c1375e6eaf6.jpg",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"getthumbnail",
+								"xs-d66f0cb6-7ad7-44d5-b88d-1c1375e6eaf6.jpg"
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "Get list all uploaded files",
 					"request": {
 						"auth": {
@@ -5419,11 +5618,10 @@
 									]
 								},
 								"url": {
-									"raw": "localhost:8000/api/v1/movefile/5dbee392-efca-42e5-ba91-e9b1594dabeb",
+									"raw": "{{url}}/api/v1/movefile/5dbee392-efca-42e5-ba91-e9b1594dabeb",
 									"host": [
-										"localhost"
+										"{{url}}"
 									],
-									"port": "8000",
 									"path": [
 										"api",
 										"v1",
@@ -5661,11 +5859,10 @@
 									}
 								],
 								"url": {
-									"raw": "localhost:8000/api/v1/trashedfiles",
+									"raw": "{{url}}/api/v1/trashedfiles",
 									"host": [
-										"localhost"
+										"{{url}}"
 									],
-									"port": "8000",
 									"path": [
 										"api",
 										"v1",
@@ -6330,11 +6527,10 @@
 									]
 								},
 								"url": {
-									"raw": "localhost:8000/api/v1/share",
+									"raw": "{{url}}/api/v1/share",
 									"host": [
-										"localhost"
+										"{{url}}"
 									],
-									"port": "8000",
 									"path": [
 										"api",
 										"v1",
@@ -8483,6 +8679,34 @@
 							"body": null
 						}
 					]
+				},
+				{
+					"name": "Get Thumbnail by shared Token",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/api/v1/getthumbnail/sm-70220d11-9602-4462-9bb0-1e1e5020e331.jpg/sharing/FfYvYgBdZQG44Oda",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"getthumbnail",
+								"sm-70220d11-9602-4462-9bb0-1e1e5020e331.jpg",
+								"sharing",
+								"FfYvYgBdZQG44Oda"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
@@ -11080,11 +11304,10 @@
 									}
 								],
 								"url": {
-									"raw": "localhost:8000/api/v1/browse/teams/shared-with-me?page=1",
+									"raw": "{{url}}/api/v1/browse/teams/shared-with-me?page=1",
 									"host": [
-										"localhost"
+										"{{url}}"
 									],
-									"port": "8000",
 									"path": [
 										"api",
 										"v1",
@@ -11281,11 +11504,10 @@
 									}
 								],
 								"url": {
-									"raw": "localhost:8000/api/v1/notifications",
+									"raw": "{{url}}/api/v1/notifications",
 									"host": [
-										"localhost"
+										"{{url}}"
 									],
-									"port": "8000",
 									"path": [
 										"api",
 										"v1",
@@ -11390,11 +11612,10 @@
 									}
 								],
 								"url": {
-									"raw": "localhost:8000/api/v1/notifications/read",
+									"raw": "{{url}}/api/v1/notifications/read",
 									"host": [
-										"localhost"
+										"{{url}}"
 									],
-									"port": "8000",
 									"path": [
 										"api",
 										"v1",
@@ -11503,11 +11724,10 @@
 									}
 								],
 								"url": {
-									"raw": "localhost:8000/api/v1/notifications",
+									"raw": "{{url}}/api/v1/notifications",
 									"host": [
-										"localhost"
+										"{{url}}"
 									],
-									"port": "8000",
 									"path": [
 										"api",
 										"v1",
@@ -11614,11 +11834,10 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "localhost:8000/api/v1/search?query=png",
+									"raw": "{{url}}/api/v1/search?query=png",
 									"host": [
-										"localhost"
+										"{{url}}"
 									],
-									"port": "8000",
 									"path": [
 										"api",
 										"v1",
@@ -11686,11 +11905,10 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "localhost:8000/api/v1/search?query=folder1",
+									"raw": "{{url}}/api/v1/search?query=folder1",
 									"host": [
-										"localhost"
+										"{{url}}"
 									],
-									"port": "8000",
 									"path": [
 										"api",
 										"v1",
@@ -11753,6 +11971,49 @@
 							"body": "{\n    \"data\": {\n        \"items\": [\n            {\n                \"data\": {\n                    \"id\": 17,\n                    \"uuid\": \"eca4dc29-5189-4136-bdc7-c682c0d7995d\",\n                    \"type\": \"folder\",\n                    \"attributes\": {\n                        \"name\": \"folder1(1)\",\n                        \"color\": null,\n                        \"emoji\": null,\n                        \"filesize\": null,\n                        \"isTeamFolder\": 0,\n                        \"items\": 0,\n                        \"trashed_items\": 0,\n                        \"parent_folder_id\": null,\n                        \"created_at\": \"18. Mar. 2023, 01:40\",\n                        \"updated_at\": \"18. Mar. 2023, 01:40\",\n                        \"deleted_at\": null\n                    },\n                    \"relationships\": {\n                        \"members\": {\n                            \"data\": []\n                        },\n                        \"invitations\": {\n                            \"data\": []\n                        },\n                        \"user\": {\n                            \"data\": {\n                                \"type\": \"user\",\n                                \"id\": 1,\n                                \"attributes\": {\n                                    \"name\": \"Admin\",\n                                    \"avatar\": null,\n                                    \"color\": null\n                                }\n                            }\n                        }\n                    }\n                }\n            },\n            {\n                \"data\": {\n                    \"id\": 10,\n                    \"uuid\": \"2a4570f9-850b-423c-ae8a-0fb99ff0d047\",\n                    \"type\": \"folder\",\n                    \"attributes\": {\n                        \"name\": \"folder10\",\n                        \"color\": null,\n                        \"emoji\": null,\n                        \"filesize\": null,\n                        \"isTeamFolder\": 0,\n                        \"items\": 0,\n                        \"trashed_items\": 0,\n                        \"parent_folder_id\": 7,\n                        \"created_at\": \"15. Feb. 2023, 01:10\",\n                        \"updated_at\": \"15. Feb. 2023, 01:10\",\n                        \"deleted_at\": null\n                    },\n                    \"relationships\": {\n                        \"members\": {\n                            \"data\": []\n                        },\n                        \"invitations\": {\n                            \"data\": []\n                        },\n                        \"parent\": {\n                            \"data\": {\n                                \"type\": \"folder\",\n                                \"id\": 7,\n                                \"attributes\": {\n                                    \"name\": \"testchunks\"\n                                }\n                            }\n                        },\n                        \"user\": {\n                            \"data\": {\n                                \"type\": \"user\",\n                                \"id\": 1,\n                                \"attributes\": {\n                                    \"name\": \"Admin\",\n                                    \"avatar\": null,\n                                    \"color\": null\n                                }\n                            }\n                        }\n                    }\n                }\n            },\n            {\n                \"data\": {\n                    \"id\": 9,\n                    \"uuid\": \"206a694c-3e31-4cc3-acd9-39d75f89f528\",\n                    \"type\": \"folder\",\n                    \"attributes\": {\n                        \"name\": \"folder10\",\n                        \"color\": null,\n                        \"emoji\": null,\n                        \"filesize\": null,\n                        \"isTeamFolder\": 0,\n                        \"items\": 0,\n                        \"trashed_items\": 0,\n                        \"parent_folder_id\": 7,\n                        \"created_at\": \"15. Feb. 2023, 01:09\",\n                        \"updated_at\": \"15. Feb. 2023, 01:09\",\n                        \"deleted_at\": null\n                    },\n                    \"relationships\": {\n                        \"members\": {\n                            \"data\": []\n                        },\n                        \"invitations\": {\n                            \"data\": []\n                        },\n                        \"parent\": {\n                            \"data\": {\n                                \"type\": \"folder\",\n                                \"id\": 7,\n                                \"attributes\": {\n                                    \"name\": \"testchunks\"\n                                }\n                            }\n                        },\n                        \"user\": {\n                            \"data\": {\n                                \"type\": \"user\",\n                                \"id\": 1,\n                                \"attributes\": {\n                                    \"name\": \"Admin\",\n                                    \"avatar\": null,\n                                    \"color\": null\n                                }\n                            }\n                        }\n                    }\n                }\n            }\n        ]\n    }\n}"
 						}
 					]
+				}
+			]
+		},
+		{
+			"name": "XRPL",
+			"item": [
+				{
+					"name": "Upload",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{authToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/api/v1/xrpl/upload/7adaf42c-8380-491e-b8fd-e79633b6271f",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"xrpl",
+								"upload",
+								"7adaf42c-8380-491e-b8fd-e79633b6271f"
+							]
+						},
+						"description": "Pass a valid file uuid"
+					},
+					"response": []
 				}
 			]
 		}

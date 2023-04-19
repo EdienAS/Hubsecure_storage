@@ -2,10 +2,10 @@
 
 namespace App\Containers\Files\Tasks;
 
-use App\Containers\Files\Exceptions\StorageFailedException;
-use App\Abstracts\Task;
 use Exception;
-use Illuminate\Support\Facades\Storage;
+use App\Abstracts\Task;
+use App\Traits\StorageDiskTrait;
+use App\Containers\Files\Exceptions\StorageFailedException;
 
 /**
  * Class StoreFileToLocalDiskTask.
@@ -14,8 +14,8 @@ use Illuminate\Support\Facades\Storage;
 class StoreFileToLocalDiskTask extends Task
 {
 
+    use StorageDiskTrait;
     
-
     /**
      * @param array $data
      * @param bool  $login
@@ -27,7 +27,7 @@ class StoreFileToLocalDiskTask extends Task
         try {
             
             $temp = (app()->environment() == 'testing') ? 'testing/' : null;
-            Storage::disk('public')->put($temp . "files/$user->id/$name", $file->get());
+            $this->getStorageDisk()->put($temp . "files/$user->id/$name", $file->get());
            
         } catch (Exception $e) {
             throw (new StorageFailedException())->debug($e);

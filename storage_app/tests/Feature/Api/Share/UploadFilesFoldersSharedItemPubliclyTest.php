@@ -131,7 +131,7 @@ class UploadFilesFoldersSharedItemPubliclyTest extends TestCase
             ])];
         
         
-        Storage::fake('local');
+//        Storage::fake('local');
         
         $file[] = UploadedFile::fake()->image('avatar.jpg');
         

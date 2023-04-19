@@ -39,9 +39,7 @@ class UpdateUserSettingsAction extends Action
      */
     public function run($request)
     {
-        $data = $request->all();
-        
-        $userSettings = $this->updateUserSettingsTask->run($data);
+        $userSettings = $this->updateUserSettingsTask->run($request);
         
         return $userSettings;
     }

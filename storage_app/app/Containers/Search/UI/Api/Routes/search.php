@@ -2,19 +2,19 @@
 
 /**
  * @SWG\Get(
- *     path="browse/folders/{uuid}",
+ *     path="search",
  *     security={{"Bearer":{}}},
- *     summary="Browse folder by uuid",
- *     tags={"Folder"},
- *     description="Browse folder uuid",
- *     operationId="BrowseFolderById",
+ *     summary="Search files and folders",
+ *     tags={"Search"},
+ *     description="Search files and folders",
+ *     operationId="SearchFilesAndFolders",
  *     produces={"application/json"},
- *     @SWG\Parameter(name="uuid",in="path",type="uuid",required=optional,
- *         description="Folder uuid",
+ *     @SWG\Parameter(name="query",in="path",type="string",required=optional,
+ *         description="Search files and folders name",
  *     ),
  *     @SWG\Response(
  *         response=200,
- *         description="Folders fetched Successfully",
+ *         description="Operation Successful",
  *     ),
  * )
  */

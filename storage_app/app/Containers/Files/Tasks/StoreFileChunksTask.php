@@ -1,6 +1,7 @@
 <?php
 namespace App\Containers\Files\Tasks;
 
+use App\Traits\StorageDiskTrait;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
@@ -9,6 +10,8 @@ use App\Containers\Share\UI\Api\Requests\PublicUploadChunksSharedItemRequest;
 
 class StoreFileChunksTask
 {
+    use StorageDiskTrait;
+
     /**
      * @throws FileNotFoundException
      */
@@ -24,7 +27,7 @@ class StoreFileChunksTask
             $name = $file->getClientOriginalName();
 
             // Get chunk file path
-            $path = Storage::disk('public')->path("chunks/$name");
+            $path = $this->getStorageDisk()->path("chunks/$name");
 
             // Build the file
             File::append($path, $file->get());
