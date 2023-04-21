@@ -2,18 +2,18 @@
 
 namespace Tests\Feature\Api\Zip;
 
+use Tests\TestCase;
 use Laravel\Passport\Passport;
 use Tests\Traits\FolderTestData;
 use Illuminate\Http\UploadedFile;
 use App\Containers\User\Models\User;
+use App\Containers\Files\Models\File;
 use Tests\Traits\UserSettingsTestData;
 use Illuminate\Support\Facades\Storage;
 use App\Containers\Folders\Models\Folder;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use App\Containers\XRPLBlock\Models\XrplBlockDocument;
 use App\Containers\XRPLBlock\Tasks\XRPLUpdateBlockStatusTask;
-use Tests\TestCase;
 
 class GenerateZipTest extends TestCase
 {
@@ -42,7 +42,7 @@ class GenerateZipTest extends TestCase
         
         $queryParams .= $folderData->uuid . '|folder,';
         
-        Storage::fake('local');
+//        Storage::fake('local');
         
 //        $file[] = UploadedFile::fake()->image('avatar.jpg');
         $file[] = UploadedFile::fake()->createWithContent('document.pdf', 100);
@@ -56,21 +56,25 @@ class GenerateZipTest extends TestCase
         $file = $this->post('api/v1/upload/file', $uploadFileData);
         
         $fileData = array();
-        foreach($file['data']['items'] as $file){
-            $fileData[] = $file['data']['uuid'] . '|file';
-            $xrplBlockUuid[] = $file['data']['relationships']['xrplBlockDocument']['data']['attributes']['uuid'];
+        foreach($file['data']['items'] as $singleFile){
+            $fileData[] = $singleFile['data']['uuid'] . '|file';
         }
         
         $queryParams .= implode(',' , $fileData);
         
-        sleep(60);
-        
-        resolve(XRPLUpdateBlockStatusTask::class)(XrplBlockDocument::whereIn('uuid', $xrplBlockUuid)->get());
-                
-        sleep(2);
-        
-        $response = $this->get('api/v1/zip?items=' . $queryParams);
+        $this->get('api/v1/zip?items=' . $queryParams)->assertStatus(200);
 
-        $response->assertStatus(200);
+        $this->post('api/v1/xrpl/upload/' . $file['data']['items'][0]['data']['uuid']);
+        
+        $newFileData = File::where('user_id', $user->id)->first();
+        
+        sleep(30);
+        
+        resolve(XRPLUpdateBlockStatusTask::class)(array($newFileData->xrplBlockDocument));
+                
+        sleep(5);
+        
+        $this->get('api/v1/zip?items=' . $queryParams)->assertStatus(200);
+        
     }
 }

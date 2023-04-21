@@ -1,8 +1,10 @@
 <?php
 namespace App\Containers\XRPLBlock\Tasks;
 
+use Storage;
 use App\Traits\XRPLBlockTrait;
 use Illuminate\Support\Facades\DB;
+use App\Containers\Files\Models\File;
 use App\Containers\XRPLBlock\Models\XrplBlockDocument;
 use App\Containers\XRPLBlock\Exceptions\XRPLUpdateBlockStatusException;
 
@@ -29,11 +31,18 @@ class XRPLUpdateBlockStatusTask
 
                     $xrplDocument = XrplBlockDocument::where('uuid', $processingXrplDocument->uuid)->first();
                     
+                    $xrplDocument->status = $response['status'];
+                    
                     if($response['status'] == config('constants.xrpl_block.status.compleated')){
 
-                        $xrplDocument->status = $response['status'];
-                    
                         $xrplDocument->block_data = json_encode($response['block_data']);
+
+                        $file = File::where('xrpl_block_document_id', $processingXrplDocument->id)->first();
+                        
+                        $file->file_storage_option_id = 2;
+                        $file->save();
+                        
+                        Storage::delete("files/$file->user_id/$file->basename");
 
                     }
 

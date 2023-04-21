@@ -380,3 +380,25 @@ $router->get('sharing/zip/{shared}', [
     'uses' => 'PublicZipSharedItem@zip',
     'middleware' => [],
 ]);
+
+/**
+ * @SWG\Get(
+ *     path="thumbnail/{name}/sharing/{shared}",
+ *     summary="Get thumbnail of shared items",
+ *     description="Editor can get thumbnail of shared item",
+ *     operationId="sharingThumbnailByToken",
+ *     produces={"application/json"},
+ *     @SWG\Parameter(name="name",in="path",type="string",required=true,
+ *         description="thumbnail name"),   
+ *     @SWG\Parameter(name="shared",in="path",type="string",required=true,
+ *         description="Existing shared item token"),
+ *     @SWG\Response(
+ *         response=200,
+ *         description="successful operation",
+ *     ),
+ * )
+ */
+$router->get('getthumbnail/{name}/sharing/{shared}', [
+    'uses' => 'PublicGetThumbnailSharedItem@getSharedThumbnail',
+    'middleware' => [],
+])->name('getsharedThumbnail');

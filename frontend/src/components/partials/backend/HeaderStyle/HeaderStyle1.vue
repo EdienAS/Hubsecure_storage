@@ -118,7 +118,7 @@
               <li class="nav-item nav-icon dropdown" v-header-toggle>
                 <a href="#" class="search-toggle dropdown-toggle" id="dropdownMenuButton03" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                   <div class="caption bg-primary line-height">
-                    <img src="@/assets/images/user/default_user.png" :alt="user?.name" class="avatar-30" />
+                    <img src="@/assets/images/user/i1.jpg" :alt="user?.name" class="avatar-30" />
                   </div>
                 </a>
                 <div class="iq-sub-dropdown dropdown-menu" aria-labelledby="dropdownMenuButton03">
@@ -133,11 +133,11 @@
                       <div class="profile-header">
                         <div class="cover-container text-center">
                           <div class="rounded-circle profile-icon bg-primary mx-auto d-block">
-                            <img src="@/assets/images/user/default_user.png" :alt="user?.name" class="avatar-70" />
+                            <img src="@/assets/images/user/i1.jpg" :alt="user?.name" class="avatar-70" />
                           </div>
                           <div class="profile-detail mt-3">
                             <h5>
-                              <a href="@/app/user-profile-edit.html">{{ user?.name }}</a>
+                              <router-link :to="{ name: 'app.user-profile-edit' }">{{ user?.name }}</router-link>
                             </h5>
                             <p>{{ user?.email }}</p>
                           </div>

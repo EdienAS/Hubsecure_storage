@@ -91,11 +91,6 @@ class User extends Authenticatable
             $this->attributes['uuid'] = $this->generateUuid();
     }
 
-    public function sendPasswordResetNotification($token)
-    {
-        $this->notify(new ResetPassword($token));
-    }
-
     public function role()
     {
         return $this->hasOne(Role::class, 'id', 'role_id');
@@ -111,6 +106,25 @@ class User extends Authenticatable
         return $this->hasOne(UserLimitation::class, 'user_id', 'id');
     }
     
+    /**
+     * Format Avatar URL
+     */
+    public function getAvatarUrlAttribute()
+    {
+        $avatar = array();
+        $avatarName = $this->userSettings->avatar;
+        
+        if(!empty($avatarName)){
+            $avatar = collect(config('filemanager.avatar_sizes'))
+                    ->mapWithKeys(function ($size) use ($avatar, $avatarName) {
+                    
+                    return [$size['name'] => route('getavatar', ['name' => "{$size['name']}-{$avatarName}"])];
+                    
+                });
+        }
+        
+        return $avatar;
+    }
     public function __call($method, $parameters)
     {
         try {

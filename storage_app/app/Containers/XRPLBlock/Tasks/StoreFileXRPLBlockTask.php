@@ -28,7 +28,7 @@ class StoreFileXRPLBlockTask extends Task
     {        
         try {            
             
-            $file = fopen(storage_path('app/public/'). $filepath, 'r');
+            $file = fopen(storage_path('app/uploads/'). $filepath, 'r');
             
             $uploadRequest = $this->xrplSendRequest(
                             null,

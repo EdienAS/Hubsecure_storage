@@ -1,28 +1,28 @@
 <?php
 namespace App\Containers\Files\Tasks;
 
-use Illuminate\Support\Facades\Storage;
+use App\Traits\StorageDiskTrait;
 use Spatie\QueueableAction\QueueableAction;
 use Intervention\Image\ImageManagerStatic as Image;
 
 class GenerateImageThumbnailTask
 {
-    use QueueableAction;
+    use QueueableAction, StorageDiskTrait;
 
     public function __invoke($fileName, $userId, $execution)
     {
         try{
             // Get image width
             $imageWidth = getimagesize(
-                Storage::disk('public')->path("temp/$userId/$fileName")
+                $this->getStorageDisk()->path("temp/$userId/$fileName")
             )[0];
 
             collect(config("filemanager.image_sizes.$execution"))
                 ->each(function ($size) use ($userId, $fileName, $imageWidth) {
-                    if ($imageWidth > $size['size']) {
+                    if ($imageWidth > $size['size'] || app()->environment() == 'testing') {
                         // Create intervention image
                         $intervention = Image::make(
-                            Storage::disk('public')->path("temp/$userId/$fileName")
+                            $this->getStorageDisk()->path("temp/$userId/$fileName")
                         )
                             ->orientate();
 
@@ -33,13 +33,13 @@ class GenerateImageThumbnailTask
 
                         // Store thumbnail to disk
                         $temp = (app()->environment() == 'testing') ? 'testing/' : null;
-                        Storage::put($temp . "files/$userId/{$size['name']}-$fileName", $intervention);
+                        $this->getStorageDisk()->put($temp . "files/$userId/{$size['name']}-$fileName", $intervention);
                     }
                 });
 
             // Delete file after generate a thumbnail
 //            if ($execution === 'later') {
-                Storage::disk('public')->delete("temp/$userId/$fileName");
+                $this->getStorageDisk()->delete("temp/$userId/$fileName");
 //            }
         } catch (Exception $e) {
             

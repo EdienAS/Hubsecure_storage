@@ -5,6 +5,7 @@ namespace App\Containers\Files\Models;
 use Config;
 use App\Traits\UuidTrait;
 use Laravel\Scout\Searchable;
+use App\Traits\StorageDiskTrait;
 use Laravel\Passport\HasApiTokens;
 use Kyslik\ColumnSortable\Sortable;
 use Database\Factories\FileFactory;
@@ -23,7 +24,8 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class File extends Authenticatable
 {
-    use SoftDeletes, HasApiTokens, HasFactory, Notifiable, UuidTrait, Sortable, Searchable;
+    use SoftDeletes, HasApiTokens, HasFactory, Notifiable, UuidTrait, Sortable, 
+            Searchable, StorageDiskTrait;
 
     public ?string $sharedAccess = null;
     
@@ -128,9 +130,40 @@ class File extends Authenticatable
     public function getThumbnailAttribute()
     {
         $thumbnail = null;
+        $baseName = $this->attributes['basename'];
+        
         if($this->attributes['type'] == "image"){
-            $thumbnail = array('sm' => Storage::url('/files/'.$this->attributes['user_id'].'/sm-'.$this->attributes['basename']),
-                'xs' => Storage::url('/files/'.$this->attributes['user_id'].'/xs-'.$this->attributes['basename']));
+            $thumbnail = collect(config('filemanager.image_sizes.immediately'))
+                    ->mapWithKeys(function ($size) use ($baseName) {
+                    
+                    return [$size['name'] => route('getthumbnail', ['name' => "{$size['name']}-{$baseName}"])];
+                    
+                });
+                
+        }
+        return $thumbnail;
+    }
+
+    /**
+     * Format shared file Thumbnail URL
+     */
+    public function getSharedThumbnailAttribute()
+    {
+        $thumbnail = null;
+        $baseName = $this->attributes['basename'];
+        
+        if($this->attributes['type'] == "image" && (!empty($this->shared->token) || !empty($this->parent->shared->token))){
+            
+            $token = !empty($this->shared->token) ? $this->shared->token : $this->parent->shared->token;
+            
+            $thumbnail = collect(config('filemanager.image_sizes.immediately'))
+                    ->mapWithKeys(function ($size) use ($baseName, $token) {
+                    
+                    return [$size['name'] => route('getsharedThumbnail', ['name' => "{$size['name']}-{$baseName}",
+                                            'shared' => $token])];
+                    
+                });
+            
         }
         return $thumbnail;
     }

@@ -2,11 +2,11 @@
 
 namespace App\Containers\Files\Actions;
 
-use Storage;
 use App\Abstracts\Action;
 use Illuminate\Support\Str;
 use League\Fractal\Manager;
 use App\Abstracts\RequestHttp;
+use App\Traits\StorageDiskTrait;
 use League\Fractal\Resource\Item;
 use App\Containers\Share\Models\Share;
 use App\Containers\Folders\Models\Folder;
@@ -24,6 +24,8 @@ use App\Containers\Folders\UI\Api\Transformers\FolderTransformer;
 class UploadChunksAction extends Action
 {
 
+    use StorageDiskTrait;
+    
     /**
      * @var  UploadFileTask
      */
@@ -92,7 +94,7 @@ class UploadChunksAction extends Action
 
             // Move file to user directory
             $temp = (app()->environment() == 'testing') ? 'testing/' : null;
-            Storage::disk('public')->move($chunkPath, $temp . "files/$user->id/$name");
+            $this->getStorageDisk()->move($chunkPath, $temp . "files/$user->id/$name");
 
             $uploadChunks = $this->uploadFileTask->run($request);
             $uploadedChunksFolderId = $uploadChunks[0]->parent_folder_id;

@@ -61,34 +61,16 @@ class CreateUserTask extends Task
 
                 $user = User::create($data);
                     
-                $clientEncryptionKeyRequest = $this->xrplSendRequest(
-                    null,
-                    'get',
-                    config('constants.xrpl_block.endpoints.generate_client_encryption_key'),
-                    null);
-                
-                $clientEncryptionKeyResponse = json_decode($clientEncryptionKeyRequest->getBody(), true);
-                
-                $clientEncryptionKey = !empty($clientEncryptionKeyResponse) ? 
-                        $clientEncryptionKeyResponse : generateRandomPhrase();
-                
-                $clientGenerateWalletRequest = $this->xrplSendRequest(
-                    null,
-                    'get',
-                    config('constants.xrpl_block.endpoints.generate_wallet'),
-                    null);
-                
-                $clientGenerateWalletResponse = json_decode($clientGenerateWalletRequest->getBody(), true);
-                
+                // Split username
+                $name = split_name($data['name']);
+
                 $userSetting = array(
                     'uuid' => 'uuid',
                     'user_id' => $user->id,
                     'file_storage_option_id' => 1,
                     'storage_limit_mb' => 100,
-                    'client_encryption_key' => $clientEncryptionKey,
-                    'client_wallet_seed' => $clientGenerateWalletResponse['seed'],
-                    'client_wallet_seq' => $clientGenerateWalletResponse['seq'],
-                    'generate_wallet_response' => json_encode($clientGenerateWalletResponse)
+                    'first_name' => $name['first_name'],
+                    'last_name'  => $name['last_name']
                 );
                 
                 Usersetting::create($userSetting);
