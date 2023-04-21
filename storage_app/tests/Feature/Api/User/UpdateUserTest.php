@@ -19,22 +19,19 @@ class UpdateUserTest extends TestCase
      */
     public function test_updateUser()
     {
-        $currentPassword = 'password';
+        
         $user = Passport::actingAs(
-            User::factory()->create(['password' => $currentPassword])
+            User::factory()->create()
         );
         
         $this->userSettingsTestData($user->id);
         
         $uuid = $user->uuid;
         
-        $newPassword = $this->faker->password;
-        
         $updateUserData = [
             'name' => $this->faker->firstName(),
-            'current_password' => $currentPassword,
-            'password' => $newPassword,
-            'password_confirmation' => $newPassword,
+            'email' => $this->faker->email,
+            'password' => $this->faker->password,
             '_method' => 'patch'
         ];
         
@@ -44,7 +41,7 @@ class UpdateUserTest extends TestCase
                 'uuid' => 'uuid',
                 'name' => $this->faker->firstName(),
                 'email' => $this->faker->email,
-                'password' => $currentPassword,
+                'password' => $this->faker->password,
                 'role_id' => 2
             ];
 

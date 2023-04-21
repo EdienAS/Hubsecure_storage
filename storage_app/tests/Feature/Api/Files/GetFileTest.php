@@ -6,13 +6,13 @@ use Tests\TestCase;
 use Laravel\Passport\Passport;
 use Illuminate\Http\UploadedFile;
 use App\Containers\User\Models\User;
+use Illuminate\Support\Facades\Http;
 use App\Containers\Files\Models\File;
 use Tests\Traits\UserSettingsTestData;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use App\Containers\XRPLBlock\Tasks\XRPLUpdateBlockStatusTask;
-
 
 class GetFileTest extends TestCase
 {
@@ -30,7 +30,7 @@ class GetFileTest extends TestCase
         
         $this->userSettingsTestData($user->id);
         
-//        Storage::fake('local');
+        Storage::fake('local');
         
         $file[] = UploadedFile::fake()->createWithContent('document.pdf', 100);
         
@@ -39,22 +39,18 @@ class GetFileTest extends TestCase
             'files' =>  $file
         ];
         
-        $file = $this->post('api/v1/upload/file', $uploadFileData);
-        
-        $this->get($file['data']['items'][0]['data']['attributes']['file_url'])->assertStatus(200);
-
-        $this->post('api/v1/xrpl/upload/' . $file['data']['items'][0]['data']['uuid']);
+        $this->post('api/v1/upload/file', $uploadFileData);
         
         $fileData = File::where('user_id', $user->id)->first();
 
-        sleep(30);
-
+        sleep(60);
+        
         resolve(XRPLUpdateBlockStatusTask::class)(array($fileData->xrplBlockDocument));
                 
-        sleep(5);
+        sleep(2);
         
-        $this->get($fileData->file_url)->assertStatus(200);
+        $response = $this->get($fileData->file_url);
 
-
+        $response->assertStatus(200);
     }
 }

@@ -37,7 +37,7 @@ class UploadChunkTest extends TestCase
         $folderId = Folder::where('uuid', $folder['data']['items'][0]['data']['uuid'])
                 ->pluck('id')->first();
         
-//        Storage::fake('local');
+        Storage::fake('local');
         
         $file[] = UploadedFile::fake()->image('avatar.jpg');
         $file[] = UploadedFile::fake()->createWithContent('document.pdf', 100);

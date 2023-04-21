@@ -26,9 +26,8 @@ class ZipTask extends Task
      *
      * @return mixed
      */
-    public function run($folders, $files, $shared)
+    public function run($folders, $files)
     {
-        ini_set('max_execution_time', -1);
         try {
             // Get zip name from single requested folder
             if ($files->isEmpty() && $folders->count() === 1) {
@@ -39,27 +38,18 @@ class ZipTask extends Task
             $zip = Zip::create($zipName ?? date('YmdHis').'_'.env('APP_NAME').'.zip');
 
             // Zip Files
-            $files->map(function ($file) use ($zip, $shared) {
+            $files->map(function ($file) use ($zip) {
                 
                 // Check user privileges to the file
-                if (! Gate::any(['can-edit', 'can-view'], [$file, $shared])) {
+                if (! Gate::any(['can-edit', 'can-view'], [$file, null])) {
                     abort(403, 'Unauthorized action.');
                 }
 
                 switch ($file->file_storage_option_id) {
                     case 1:
 
-                        // get file path
-                        $filePath = "files/$file->user_id/$file->basename";
+                    if(!empty($file->xrpl_block_document_id)){
                         
-                        // Add file into zip
-                        if (Storage::exists($filePath)) {
-                            $zip->add(Storage::path($filePath), $file->name);
-                        }
-                        break;
-                    
-                    case 2:
-
                         $response = resolve(XRPLDownloadDocumentTask::class)($file->xrplBlockDocument->uuid);
                     
                         //Download file from xrpl url once
@@ -73,7 +63,16 @@ class ZipTask extends Task
                         unlink($tempFile);
                                 
                         $zip->add($download_file, $file->name);
+                    } else {
 
+                        // get file path
+                        $filePath = "files/$file->user_id/$file->basename";
+
+                        // Add file into zip
+                        if (Storage::exists($filePath)) {
+                            $zip->add(Storage::path($filePath), $file->name);
+                        }
+                    }
                         break;
                     
                     default:
@@ -82,10 +81,10 @@ class ZipTask extends Task
             });
             
             // Zip Folders
-            $folders->map(function ($folder) use ($zip, $shared) {
+            $folders->map(function ($folder) use ($zip) {
 
                 // Check user privileges to the folder
-                if (! Gate::any(['can-edit', 'can-view'], [$folder, $shared])) {
+                if (! Gate::any(['can-edit', 'can-view'], [$folder, null])) {
                     abort(403, 'Unauthorized action.');
                 }
 
@@ -101,24 +100,8 @@ class ZipTask extends Task
                     $zipDestination = "{$file['folder_path']}/{$file['name']}";
                     switch ($file['file_storage_option_id']) {
                         case 1:
+                            if(!empty($file['xrpl_block_document_id'])){
                                 
-                                // get file path
-                                $filePath = "files/{$file['user_id']}/{$file['basename']}";
-
-                                // Add file into zip
-                                if (Storage::exists($filePath)) {
-
-                                    // local disk
-                                    if (isStorageDriver('local')) {
-
-                                        $zip->add(Storage::path($filePath), $zipDestination);
-                                    }
-                                }
-                                
-                            break;
-
-                        case 2:
-                            
                                 $response = resolve(XRPLDownloadDocumentTask::class)($file['xrplBlockDocument']['uuid']);
                     
                                 //Download file from xrpl url once
@@ -132,6 +115,20 @@ class ZipTask extends Task
                                 unlink($tempFile);
                                 
                                 $zip->add($download_file, $zipDestination);
+                            } else {
+                                // get file path
+                                $filePath = "files/{$file['user_id']}/{$file['basename']}";
+
+                                // Add file into zip
+                                if (Storage::exists($filePath)) {
+
+                                    // local disk
+                                    if (isStorageDriver('public')) {
+
+                                        $zip->add(Storage::path($filePath), $zipDestination);
+                                    }
+                                }
+                            }   
                             break;
 
                         default:

@@ -4,7 +4,6 @@ namespace Tests\Feature\Api\Traffic;
 
 use Tests\TestCase;
 use Laravel\Passport\Passport;
-use App\Traits\StorageDiskTrait;
 use Illuminate\Http\UploadedFile;
 use App\Containers\User\Models\User;
 use App\Containers\Files\Models\File;
@@ -15,7 +14,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class GetTrafficDataTest extends TestCase
 {
-    use RefreshDatabase, WithFaker, UserSettingsTestData, StorageDiskTrait;
+    use RefreshDatabase, WithFaker, UserSettingsTestData;
     /**
      * A basic feature test example.
      *
@@ -29,7 +28,7 @@ class GetTrafficDataTest extends TestCase
         
         $this->userSettingsTestData($user->id);
         
-        Storage::fake('local');
+        Storage::fake('public');
         
         $file[] = UploadedFile::fake()->createWithContent('document.pdf', 100);
         

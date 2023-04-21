@@ -5,7 +5,6 @@ namespace Tests\Feature\Api\Files;
 use Tests\TestCase;
 use Laravel\Passport\Passport;
 use Tests\Traits\FolderTestData;
-use App\Traits\StorageDiskTrait;
 use Illuminate\Http\UploadedFile;
 use App\Containers\User\Models\User;
 use App\Containers\Files\Models\File;
@@ -17,8 +16,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class UploadFileTest extends TestCase
 {
-    use RefreshDatabase, WithFaker, UserSettingsTestData, FolderTestData, 
-            StorageDiskTrait;
+    use RefreshDatabase, WithFaker, UserSettingsTestData, FolderTestData;
     /**
      * UploadFileTest.
      *
@@ -55,7 +53,7 @@ class UploadFileTest extends TestCase
         foreach($response['data']['items'] as $data){
             if($data['data']['attributes']['file_storage_option_id'] == 1){
                 $filePath = "testing/files/$user->id/" . $data['data']['attributes']['basename'];
-                $this->getStorageDisk()->assertExists($filePath);
+                Storage::disk('public')->assertExists($filePath);
             }
         }
         

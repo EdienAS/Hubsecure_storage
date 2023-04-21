@@ -2,7 +2,6 @@
 
 namespace Tests;
 
-use Storage;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
 
 abstract class TestCase extends BaseTestCase
@@ -19,8 +18,5 @@ abstract class TestCase extends BaseTestCase
     public function setUp() :void  {
     parent::setUp();
     \Artisan::call('passport:install',['-vvv' => true]);
-    
-    Storage::deleteDirectory('testing/avatar');
-    Storage::deleteDirectory('testing/files');
 }
 }
