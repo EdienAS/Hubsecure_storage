@@ -29,7 +29,6 @@ class FileResource extends JsonResource
                     'mimetype'      => $this->mimetype,
                     'file_url'      => $this->file_url,
                     'thumbnail'     => $this->thumbnail,
-                    'shared_thumbnail'     => $this->sharedThumbnail,
                     'file_storage_option_id'     => $this->file_storage_option_id,
                     'parent_folder_id'     => $this->parent_folder_id,
                     'file_hash'     => $this->file_hash,

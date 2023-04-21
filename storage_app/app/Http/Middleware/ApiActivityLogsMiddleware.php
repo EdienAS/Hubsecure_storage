@@ -52,7 +52,7 @@ class ApiActivityLogsMiddleware
         $logEntry->save();
         
         $logData = '{"date" : ' . date('Y-m-d H:i:s') . ','
-                . '"URL" : "' . $request->url() . '",'
+                . '"URL" : ' . $request->url() . ','
                 . '"Method":' . $request->method() . ','
                 . '"Request Body" : ' . json_encode($request_body) .','
                 . '"Request Header" : ' . json_encode($request->header()) .','

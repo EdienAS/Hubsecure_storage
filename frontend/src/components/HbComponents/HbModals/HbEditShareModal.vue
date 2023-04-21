@@ -154,11 +154,7 @@ export default {
         _method: "delete",
         tokens: [this._props.fc.token],
       };
-      this.deleteShareAn(payload)
-        .then(() => {
-          this.$emit("close");
-        })
-        .catch((e) => console.log("e", e));
+      this.deleteShareAn(payload);
     },
     updateFolderSubmit() {
       const payload = {
@@ -197,11 +193,7 @@ export default {
       if (this.permission) {
         console.log("payload", payload);
         const finalPayload = { token: this._props.fc.token, data: payload };
-        this.updateShareDetailsAn(finalPayload)
-          .then(() => {
-            this.$emit("close");
-          })
-          .catch((e) => console.log("e", e));
+        this.updateShareDetailsAn(finalPayload);
       }
     },
   },

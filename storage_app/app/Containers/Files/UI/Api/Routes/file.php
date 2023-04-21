@@ -324,35 +324,3 @@ $router->post('upload/chunks', [
         'auth:api',
     ],
 ]);
-
-/**
- * @SWG\Get(
- *     path="/getthumbnail/{filename}",
- *     security={{"Bearer":{}}},
- *     summary="Get thumbnail by name",
- *     tags={"file"},
- *     description="Get thumbnail name",
- *     operationId="thumbnailByName",
- *     produces={"application/json"},
- *     @SWG\Parameter(
- *         name="filename",
- *         in="path",
- *         type="string",
- *         required=true,
- *         description="thumbnail name",
- *     ),
- *     @SWG\Response(
- *         response=200,
- *         description="successful operation",
- *         @SWG\Schema(
- *            @SWG\Items(ref="#/definitions/file")
- *         ),
- *     ),
- * )
- */
-$router->get('getthumbnail/{name}', [
-    'uses' => 'GetThumbnail@getThumbnail',
-    'middleware' => [
-        'auth:api',
-    ],
-])->name('getthumbnail');

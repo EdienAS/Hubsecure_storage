@@ -584,7 +584,6 @@ if (! function_exists('getThumbnailFileList')) {
         return collect([
             config('filemanager.image_sizes.later'),
             config('filemanager.image_sizes.immediately'),
-            config('filemanager.avatar_sizes')
         ])->collapse()
             ->map(fn ($item) => $item['name'] . '-' . $basename);
     }
@@ -810,81 +809,5 @@ if (! function_exists('generateRandomPhrase')) {
         }
         return implode(' ', $words);
 
-    }
-}
-
-if (! function_exists('store_avatar')) {
-    /**
-     * Generate multiple avatar sizes and store it in app storage
-     */
-    function store_avatar($request, $name): ?string
-    {
-        // Check if file exist in http request
-        if (! $request->hasFile($name)) {
-            return null;
-        }
-
-        // Get file
-        $image = $request->file($name);
-
-        // Check supported file extension
-        if (! in_array($image->getClientMimeType(), ['image/jpeg', 'image/jpg', 'image/png'])) {
-            return null;
-        }
-
-        // Generate avatar name
-        $avatar_name = Str::uuid() . '.' . $image->getClientOriginalExtension();
-
-        // Create intervention image
-        $intervention = Image::make($image->getRealPath());
-
-        // Generate avatar sizes
-        generate_avatar_thumbnails($intervention, $avatar_name);
-
-        // Return path to image
-        return $avatar_name;
-    }
-}
-
-    if (! function_exists('generate_avatar_thumbnails')) {
-        /**
-         * Create avatar thumbnails
-         */
-        function generate_avatar_thumbnails($intervention, $avatar_name)
-        {
-            collect(config('filemanager.avatar_sizes'))
-                ->each(function ($size) use ($intervention, $avatar_name) {
-                    
-                    $user = auth()->user();
-                    
-                    $currentAvatar = $user->userSettings->avatar;
-                    if(!empty($currentAvatar)){
-                        getThumbnailFileList($currentAvatar)
-                            ->each(fn ($thumbnail) => Storage::delete("avatar/$user->id/$thumbnail"));
-                    }
-                    // fit thumbnail
-                    $intervention->fit($size['size'], $size['size'])->stream();
-
-                    // Store thumbnail to disk
-                    $temp = (app()->environment() == 'testing') ? 'testing/' : null;
-                    
-                    Storage::put($temp . "avatar/$user->id/{$size['name']}-{$avatar_name}", $intervention);
-                });
-        }
-    }
-
-if (! function_exists('split_name')) {
-    /**
-     * Split name for 2 parts
-     */
-    function split_name(string $name): array
-    {
-        $firstName = explode(' ', $name)[0];
-        $lastName = str_replace("$firstName ", '', $name);
-
-        return [
-            'first_name' => $firstName,
-            'last_name'  => $lastName !== $firstName ? $lastName : null,
-        ];
     }
 }

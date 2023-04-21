@@ -1,7 +1,6 @@
 import Vue from "vue";
 import Vuex from "vuex";
 import axios from "axios";
-import store from "@/store";
 
 Vue.use(Vuex);
 
@@ -31,12 +30,10 @@ export default {
   actions: {
     async fetchRecentFilesAn({ commit }) {
       return await new Promise((t, f) => {
-        store.commit("Browser/setHbLoader", true, { root: true });
         axios
           .get("/files?orderBy=desc&limit=4")
           .then((res) => {
             commit("setRecentFiles", res.data.data.items);
-            store.commit("Browser/setHbLoader", false, { root: true });
           })
           .catch((e) => {
             f(e);
@@ -50,7 +47,7 @@ export default {
           .then((res) => {
             if (res.status === 204) {
               commit("deleteFileById", payload_id);
-              store.commit("Browser/setHbLoader", false, { root: true });
+
               Vue.swal.fire({
                 position: "top-center",
                 icon: "success",
@@ -74,7 +71,6 @@ export default {
             if (res.status === 204) {
               commit("deleteFileByIdPermanentlyMn", payload_id);
               commit("deleteFileById", payload_id);
-              store.commit("Browser/setHbLoader", false, { root: true });
               Vue.swal.fire({
                 position: "top-center",
                 icon: "success",

@@ -18,8 +18,6 @@ class SettingsResource extends JsonResource
                 'id'         => $this->user_id,
                 'type'       => 'settings',
                 'attributes' => [
-                    'file_storage_option_id' => $this->file_storage_option_id,
-                    'storage_limit_mb' => $this->storage_limit_mb,
                     'avatar'       => $this->avatar,
 //                    'name'         => $this->name,
                     'first_name'   => $this->first_name,

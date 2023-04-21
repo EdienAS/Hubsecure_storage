@@ -15,13 +15,6 @@ class FileStorageOptionsTableSeeder extends Seeder
             [
                 'id'         => 1,
                 'uuid'       => Str::uuid(date('YmdHisu')),
-                'name'      => 'Local Storage',
-                'created_at' => $date,
-                'updated_at' => $date,
-            ],
-            [
-                'id'         => 2,
-                'uuid'       => Str::uuid(date('YmdHisu')),
                 'name'      => 'XRPL Storage',
                 'created_at' => $date,
                 'updated_at' => $date,

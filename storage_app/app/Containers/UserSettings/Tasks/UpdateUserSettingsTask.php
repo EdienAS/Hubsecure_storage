@@ -22,17 +22,14 @@ class UpdateUserSettingsTask extends Task
      *
      * @return mixed
      */
-    public function run($request)
+    public function run(array $data)
     {
         
         try {
             
-            $userId = User::where('uuid', $request->uuid)->pluck('id')->first();
+            $userId = User::where('uuid', $data['uuid'])->pluck('id')->first();
 
             DB::beginTransaction();
-            
-            $data = $request->all();
-            $data['avatar'] = store_avatar($request, 'avatar');
             
             $userSettings = Usersetting::updateOrCreate(
                     ['user_id' => $userId],$data

@@ -2,10 +2,10 @@
 
 namespace App\Containers\Files\Tasks;
 
-use Exception;
-use App\Abstracts\Task;
-use App\Traits\StorageDiskTrait;
 use App\Containers\Files\Exceptions\ProcessImageThumdnailException;
+use App\Abstracts\Task;
+use Exception;
+use Illuminate\Support\Facades\Storage;
 
 /**
  * Class ProcessImageThumbnailTask.
@@ -13,7 +13,6 @@ use App\Containers\Files\Exceptions\ProcessImageThumdnailException;
  */
 class ProcessImageThumbnailTask extends Task
 {
-    use StorageDiskTrait;
 
     public function __construct(
         public GenerateImageThumbnailTask $generateImageThumbnailTask,
@@ -39,7 +38,7 @@ class ProcessImageThumbnailTask extends Task
         try {
             
             // Get local disk instance
-            $disk = $this->getStorageDisk();
+            $disk = Storage::disk('public');
 
             $temp = (app()->environment() == 'testing') ? 'testing/' : null;
             if (! in_array($disk->mimeType($temp . "files/$userId/$name"), $this->availableFormats)) {
