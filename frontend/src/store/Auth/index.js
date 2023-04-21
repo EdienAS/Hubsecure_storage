@@ -203,13 +203,38 @@ export default {
               .fire({
                 position: "top-center",
                 icon: "success",
-                title: "Password Reset Success .!",
+                title: "Password Updated .!",
                 showConfirmButton: false,
                 timer: 1500,
               })
               .then(() => {
                 router.push({ name: "auth.login" });
               });
+            resolve(res);
+          })
+          .catch((e) => {
+            reject(e);
+          });
+      });
+    },
+    HbUpdateProfile({ commit }, payload) {
+      if (Vue.$cookies.get("auth_user_uuid") !== "" && Vue.$cookies.get("auth_user_uuid") !== null) {
+        var user_uuid2 = Vue.$cookies.get("auth_user_uuid");
+      }
+      return new Promise((resolve, reject) => {
+        axios
+          .post(`${process.env.VUE_APP_BACKEND_URL}/user/${user_uuid2}`, payload)
+          .then((res) => {
+            commit("HbRemoveUserMn", "");
+            commit("HbRemoveToken", "");
+            commit("HbSetUUID", "");
+            Vue.swal.fire({
+              position: "top-center",
+              icon: "success",
+              title: "Username Updated .!",
+              showConfirmButton: false,
+              timer: 1500,
+            });
             resolve(res);
           })
           .catch((e) => {

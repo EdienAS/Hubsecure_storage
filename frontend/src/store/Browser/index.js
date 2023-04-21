@@ -135,7 +135,21 @@ export default {
           .get(`/browse/folders?orderBy=desc`)
           .then((r) => {
             commit("setHbLoader", false);
-            // commit("setAllDocumentsRootMn", r.data.data); // 4
+
+            // new :: start
+            // r.data.data.items.map((item) => {
+            //   if (item.data.type === "image") {
+            //     const img_name = item.data.attributes.thumbnail.sm.split("/")[6];
+            //     axios
+            //       .get(`getthumbnail/${img_name}`)
+            //       .then((res) => {
+            //         item.data.attributes.thumbnail.sm = JSON.stringify(res.data);
+            //       })
+            //       .catch((e) => console.log("e", e));
+            //   }
+            // });
+            // new :: end
+
             commit("setAllDocumentsItemsMn", r.data.data.items);
             if (r.data.data.meta.root?.data?.uuid !== undefined) {
               commit("setParentFolderId", r.data.data.meta.root);
@@ -157,6 +171,19 @@ export default {
         axios
           .get(`/browse/folders/${folder_id}`)
           .then((r) => {
+            // new :: start
+            // r.data.data.items.map((item) => {
+            //   if (item.data.type === "image") {
+            //     const img_name = item.data.attributes.thumbnail.sm.split("/")[6];
+            //     axios
+            //       .get(`getthumbnail/${img_name}`)
+            //       .then((res) => {
+            //         item.data.attributes.thumbnail.sm = JSON.stringify(res.data);
+            //       })
+            //       .catch((e) => console.log("e", e));
+            //   }
+            // });
+            // new :: end
             commit("setHbLoader", false);
             commit("setFolderUuid", folder_id);
             commit("setAllDocumentsItemsMn", r.data.data.items);
