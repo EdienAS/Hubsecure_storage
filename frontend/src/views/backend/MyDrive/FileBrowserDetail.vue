@@ -94,7 +94,7 @@
                 <div class="folder-meta">
                   <!-- folderName :: start -->
                   <div class="folder-name">
-                    <b-input class="bg-white border-none" :value="doc.data.attributes.name" @change.prevent="updateFolderFn($event, doc)" />
+                    <b-input class="bg-white border-none" :value="doc.data.attributes.name" @change="updateFolderFn($event, doc)" />
                   </div>
                   <div class="f-meta-btm d-flex justify-content-between">
                     <span class="mr-1" v-if="doc.data.relationships.shared"
