@@ -60,7 +60,7 @@
         <div class="row">
           <div class="col-lg-3 col-md-3 col-sm-6" v-for="doc in getAllDocumentsItems" :key="doc.uuid">
             <!-- folder :: start  -->
-            <div v-if="doc.data.type === 'folder'" class="card" @click="showSingleFolderDetailFn(doc.data.uuid)" @dblclick="getDocDetailsFn(doc.data.uuid)">
+            <div v-if="doc.data.type === 'folder'" class="card" @click="showSingleFolderDetailFn(doc.data.uuid)" @dblclick.prevent="getDocDetailsFn(doc.data.uuid)">
               <div class="card-body hub-mydrive-folder" style="cursor: pointer">
                 <!-- folderImg :: start -->
                 <div class="d-flex justify-content-between">
