@@ -82,12 +82,14 @@ RUN groupadd -g 1000 ${GROUP} && useradd -u 1000 -ms /bin/bash -g ${GROUP} ${USE
 # Grant Permissions
 RUN chown -R ${USER} /var/www
 
-# Select User
-USER ${USER}
+# Add docker custom crontab
+ADD crontab_laravel /etc/cron.d/crontab_laravel
 
-# Copy permission to selected user
-COPY --chown=${USER}:${GROUP} . .
+# Update the crontab file permission
+RUN chmod 0644 /etc/cron.d/crontab_laravel
 
-EXPOSE 9000
+# Specify crontab file for running
+RUN crontab /etc/cron.d/crontab_laravel
 
-CMD ["php-fpm"]
+# execute crontab
+CMD ["cron", "-f"]
