@@ -7,7 +7,7 @@ The complete HubSecure Storage Solution consists of 3 components:
 
 * XRPL API
 * Backend API
-* Frontend
+* Frontend [Work in progress]
 
 This repository has all three components in their respective folder.
 ___
@@ -70,7 +70,7 @@ Backend API helps with almost all requests coming from Frontend. It manages user
 
 ___
 
-### Frontend
+### Frontend [Work in progress]
 
 Frontend handled everything about generating View.
 
