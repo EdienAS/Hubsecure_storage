@@ -99,7 +99,6 @@ export default {
     },
     async updateFolderNameAn({ commit }, payload) {
       return await new Promise((t, f) => {
-        commit("setHbLoader", true);
         axios
           .patch(`/folder/${payload.uuid}`, { _method: "patch", name: payload.newName })
           .then((res) => {
@@ -136,7 +135,21 @@ export default {
           .get(`/browse/folders?orderBy=desc`)
           .then((r) => {
             commit("setHbLoader", false);
-            // commit("setAllDocumentsRootMn", r.data.data); // 4
+
+            // new :: start
+            // r.data.data.items.map((item) => {
+            //   if (item.data.type === "image") {
+            //     const img_name = item.data.attributes.thumbnail.sm.split("/")[6];
+            //     axios
+            //       .get(`getthumbnail/${img_name}`)
+            //       .then((res) => {
+            //         item.data.attributes.thumbnail.sm = JSON.stringify(res.data);
+            //       })
+            //       .catch((e) => console.log("e", e));
+            //   }
+            // });
+            // new :: end
+
             commit("setAllDocumentsItemsMn", r.data.data.items);
             if (r.data.data.meta.root?.data?.uuid !== undefined) {
               commit("setParentFolderId", r.data.data.meta.root);
@@ -158,6 +171,19 @@ export default {
         axios
           .get(`/browse/folders/${folder_id}`)
           .then((r) => {
+            // new :: start
+            // r.data.data.items.map((item) => {
+            //   if (item.data.type === "image") {
+            //     const img_name = item.data.attributes.thumbnail.sm.split("/")[6];
+            //     axios
+            //       .get(`getthumbnail/${img_name}`)
+            //       .then((res) => {
+            //         item.data.attributes.thumbnail.sm = JSON.stringify(res.data);
+            //       })
+            //       .catch((e) => console.log("e", e));
+            //   }
+            // });
+            // new :: end
             commit("setHbLoader", false);
             commit("setFolderUuid", folder_id);
             commit("setAllDocumentsItemsMn", r.data.data.items);
@@ -185,11 +211,9 @@ export default {
     },
     async getSingleFileDetailsAn({ commit }, file_uuid) {
       return await new Promise((t, f) => {
-        commit("setHbLoader", true);
         axios
           .get(`/file/${file_uuid}`)
           .then((r) => {
-            commit("setHbLoader", false);
             commit("resetRightSideBar", null);
             commit("setRightSideFileDetail", r.data.data.items);
             t(r);
@@ -216,13 +240,13 @@ export default {
     },
     async deleteFolderByIdToTrashAn({ commit }, folder_id) {
       return await new Promise((t, f) => {
-        commit("setHbLoader", true);
         axios
           .delete(`/trashfolder/${folder_id}`)
           .then((res) => {
             if (res.status === 204) {
               commit("setHbLoader", false);
               commit("deleteFolderByIdMn", folder_id);
+              commit("setHbLoader", false);
               Vue.swal.fire({
                 position: "top-center",
                 icon: "success",
@@ -238,13 +262,13 @@ export default {
     },
     async deleteFolderByIdPermanentlyAn({ commit }, payload_id) {
       return await new Promise((t, f) => {
-        commit("setHbLoader", true);
         axios
           .post(`/folder/${payload_id}`, { _method: "delete", force_delete: 1 })
           .then((res) => {
             if (res.status === 204) {
               commit("setHbLoader", false);
               commit("deleteFolderByIdMn", payload_id);
+              commit("setHbLoader", false);
               Vue.swal.fire({
                 position: "top-center",
                 icon: "success",
@@ -262,14 +286,13 @@ export default {
     },
     async deleteFileByIdToTrash({ commit }, payload_id) {
       return await new Promise((t, f) => {
-        commit("setHbLoader", true);
         axios
           .delete(`/trashfile/${payload_id}`)
           .then((res) => {
             if (res.status === 204) {
               commit("setHbLoader", false);
               commit("deleteFolderByIdMn", payload_id);
-
+              commit("setHbLoader", false);
               Vue.swal.fire({
                 position: "top-center",
                 icon: "success",
@@ -286,13 +309,13 @@ export default {
     },
     async deleteFileByIdPermanently({ commit }, payload_id) {
       return await new Promise((t, f) => {
-        commit("setHbLoader", true);
         axios
           .post(`/file/${payload_id}`, { _method: "delete", force_delete: 1 })
           .then((res) => {
             if (res.status === 204) {
               commit("setHbLoader", false);
               commit("deleteFolderByIdMn", payload_id);
+              commit("setHbLoader", false);
               Vue.swal.fire({
                 position: "top-center",
                 icon: "success",
@@ -324,8 +347,8 @@ export default {
           .post(`/restorefolders`, payload)
           .then((res) => {
             if (res.status === 204) {
-              commit("setHbLoader", false);
               commit("deleteFolderByIdMn", payload.items[0].uuid);
+              commit("setHbLoader", false);
               Vue.swal.fire({
                 position: "top-center",
                 icon: "success",
@@ -382,26 +405,12 @@ export default {
           .get(`/getfile/${payload.base_name}`, { responseType: "blob" })
           .then((res) => {
             commit("setHbLoader", false);
-            console.log("base_name", payload.base_name);
-            console.log("file_name", payload.file_name);
-            // WAY - 1
-            // set ================>  .get(`/getFile/${file_name}`, { responseType: "blob" })
             const url = window.URL.createObjectURL(new Blob([res.data]));
             const link = document.createElement("a");
             link.href = url;
             link.setAttribute("download", payload.file_name);
             document.body.appendChild(link);
             link.click();
-
-            // WAY - 2
-            // set ================>  .get(`/getFile/${file_name}`, { responseType: "arraybuffer" })
-            // const file = new File([res.data], file_name);
-            // const url = window.URL.createObjectURL(file);
-            // const link = document.createElement("a");
-            // link.href = url;
-            // link.setAttribute("download", file_name);
-            // document.body.appendChild(link);
-            // link.click();
             t(res);
           })
           .catch((e) => {
@@ -416,10 +425,9 @@ export default {
         axios
           .get(`/getfolder/${folder_uuid}`, { responseType: "arraybuffer" })
           .then((response) => {
-            commit("setHbLoader", false);
-            console.log("response", response);
             const blob = new File([response.data], { type: response.headers["content-type"] });
             saveAs(blob, "folder.zip");
+            commit("setHbLoader", false);
             t(response);
           })
           .catch((e) => {
@@ -437,6 +445,23 @@ export default {
             if (res.status === 200) {
               commit("setHbLoader", false);
               commit("setAllDocumentsItemsMn", res.data.data.items);
+            }
+            t(res);
+          })
+          .catch((e) => {
+            console.log("e", e);
+            f(e);
+          });
+      });
+    },
+    async secureWithXRPLAn({ commit }, file_uuid) {
+      return await new Promise((t, f) => {
+        commit("setHbLoader", true);
+        axios
+          .post(`/xrpl/upload/${file_uuid}`)
+          .then((res) => {
+            if (res.status === 200) {
+              commit("setHbLoader", false);
             }
             t(res);
           })

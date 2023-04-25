@@ -1,0 +1,4 @@
+# m h  dom mon dow   command
+# If your docker doesn't use the bin/bash as the default environment
+* * * * * /bin/bash -c 'cd /var/www/ && php artisan schedule:run' >/dev/null 2>&1
+#

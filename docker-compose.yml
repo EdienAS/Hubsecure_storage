@@ -119,6 +119,21 @@ services:
       - ./storage_app:/var/www:delegated
       - ./storage_app/php.ini:/usr/local/etc/php/conf.d/local.ini
 
+
+  cron:
+    build:
+      context: ./dockerfiles
+      dockerfile: php.cron.dockerfile
+      args:
+        - UID=${UID:-1000}
+        - GID=${GID:-1000}
+    restart: always
+    volumes:
+      - ./storage_app:/var/www:delegated
+      - ./storage_app/php.ini:/usr/local/etc/php/conf.d/local.ini
+    depends_on:
+      - app
+
   composer:
     build:
       context: ./dockerfiles
