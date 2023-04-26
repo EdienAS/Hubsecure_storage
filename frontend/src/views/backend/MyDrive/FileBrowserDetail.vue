@@ -60,7 +60,7 @@
         <div class="row">
           <div class="col-lg-3 col-md-3 col-sm-6" v-for="doc in getAllDocumentsItems" :key="doc.uuid">
             <!-- folder :: start  -->
-            <div v-if="doc.data.type === 'folder'" class="card" @click="showSingleFolderDetailFn(doc.data.uuid)" @dblclick.prevent="getDocDetailsFn(doc.data.uuid)">
+            <div v-if="doc.data.type === 'folder'" class="card" @click="showSingleFolderDetailFn(doc.data.uuid)" @dblclick="getDocDetailsFn(doc.data.uuid)">
               <div class="card-body hub-mydrive-folder" style="cursor: pointer">
                 <!-- folderImg :: start -->
                 <div class="d-flex justify-content-between">
@@ -708,125 +708,121 @@ export default {
     ...mapMutations('Share', ['resetShareDataDetails']),
     ...mapActions('Browser', ['secureWithXRPLAn', 'downloadFolderByIdAn', 'getSingleFolderDetailsAn', 'getSingleFileDetailsAn', 'getSingleFileDetailsAn', 'createFolderAn', 'getAllDocumentsAn', 'getDocDetailsAn', 'updateFolderNameAn', 'deleteFolderByIdToTrashAn', 'deleteFolderByIdPermanentlyAn', 'deleteFileByIdToTrash', 'deleteFileByIdPermanently', 'downloadFileById']),
 
-  secureFileByIdFn(file_uuid){
-    this.secureWithXRPLAn(file_uuid);
-  },
-  handleFileUpload(){
-    console.log('No logic added yet');
-  },
-  showSingleFolderDetailFn(folder_uuid){
-    this.getSingleFolderDetailsAn(folder_uuid);
-  },
-  showSingleFileDetailFn(file_uuid){
-    this.getSingleFileDetailsAn(file_uuid);
-  },
-  createNewFolderFn(parentFolderId){
-    this.createFolderAn(parentFolderId);
-    this.$refs['right-menu'].hide();
-  },
-  showModalWindow(){
-    this.$refs['right-menu'].show()
-  },
-  shareFolderByIdFn(folder_uuid){
-    this.$refs['sfm'].show();
-    this.getSingleFolderDetailsAn(folder_uuid).then(()=>{
-      let fData =  this.getRightSideFolderDetail
-      this.fc = {
-        name: fData[0].data?.attributes?.name,
-        items: fData[0].data?.attributes?.items,
-        uuid: fData[0].data?.uuid
-      }
-    }).catch(e => console.log('e', e));
-  },
-  shareFileByIdFn(file_uuid){
-    this.$refs['sfm'].show();
-    this.getSingleFileDetailsAn(file_uuid).then(()=>{
-      let fData = this.getRightSideFileDetail;
-      this.fc = {
-        name: fData[0].data?.attributes?.name,
-        items: fData[0].data?.attributes?.items,
-        uuid: fData[0].data?.uuid,
-        type: 'file'
-      }
-    }).catch(e => console.log('e', e));
-  },
-  editShareFolderByIdFn(share_data){
-    this.$refs['sfm2'].show();
-    this.fc = share_data;
-  },
-  editShareFileByIdFn(share_data){
-    this.$refs['sfm3'].show();
-    this.fc = share_data;
-  },
-  closeShareModal(){
-    this.$refs['sfm'].hide();
-    this.resetShareDataDetails();
-  },
-
-  closeEditShareModal(){
-    this.$refs['sfm2'].hide();
-    this.getAllDocumentsAn();
-    this.resetShareDataDetails();
-  },
-  closeEditFileShareModal(){
-    this.$refs['sfm3'].hide();
-    this.getAllDocumentsAn();
-    this.resetShareDataDetails();
-  },
-
-
-  updateFolderFn(e, doc) {
-    const payload = {
-      newName: e,
-      uuid: doc.data.uuid
-    }
-    this.updateFolderNameAn(payload)
-  },
-
-  async uploadDocs(event, id) {
-
-    this.isFileUploading = true;
-
-    if(!event.target.files) return;
-
-    const fd = new FormData()
-    for (let i = 0; i < event.target.files.length; i++ ){
-      fd.append('files[' + i + ']', event.target.files[i]);
-    }
-
-    fd.append('uuid', 'uuid')
-
-    if(id !== null){
-      fd.append('parent_folder_id', parseInt(id))
-    }
-
-    await axios.post('/upload/file', fd, {
-        headers: {
-          'Content-Type': 'multipart/form-data'
-        },
-        onUploadProgress: function (progressEvent) {
-          console.log(parseInt( Math.round( ( progressEvent.loaded / progressEvent.total ) * 100 ) ));
-          // this.uploadPercentage = parseInt( Math.round( ( progressEvent.loaded / progressEvent.total ) * 100 ) );
-        }.bind(this)
-      }).then((res) => {
-        if(res.status === 200){
-          this.$refs['right-menu'].hide();
-          if(this.$store.getters['Browser/getFolderUuid'] !== null){
-            this.getDocDetailsAn(this.$store.getters['Browser/getFolderUuid']);
-          } else {
-            this.getAllDocumentsAn();
-          }
-          this.isFileUploading = false;
-        } else {
-          alert('something went wrong in file upload');
+    secureFileByIdFn(file_uuid){
+      this.secureWithXRPLAn(file_uuid);
+    },
+    handleFileUpload(){
+      console.log('No logic added yet');
+    },
+    showSingleFolderDetailFn(folder_uuid){
+      this.getSingleFolderDetailsAn(folder_uuid);
+    },
+    showSingleFileDetailFn(file_uuid){
+      this.getSingleFileDetailsAn(file_uuid);
+    },
+    createNewFolderFn(parentFolderId){
+      this.createFolderAn(parentFolderId);
+      this.$refs['right-menu'].hide();
+    },
+    showModalWindow(){
+      this.$refs['right-menu'].show()
+    },
+    shareFolderByIdFn(folder_uuid){
+      this.$refs['sfm'].show();
+      this.getSingleFolderDetailsAn(folder_uuid).then(()=>{
+        let fData =  this.getRightSideFolderDetail
+        this.fc = {
+          name: fData[0].data?.attributes?.name,
+          items: fData[0].data?.attributes?.items,
+          uuid: fData[0].data?.uuid
         }
-      }).catch(e => console.log(e));
+      }).catch(e => console.log('e', e));
+    },
+    shareFileByIdFn(file_uuid){
+      this.$refs['sfm'].show();
+      this.getSingleFileDetailsAn(file_uuid).then(()=>{
+        let fData = this.getRightSideFileDetail;
+        this.fc = {
+          name: fData[0].data?.attributes?.name,
+          items: fData[0].data?.attributes?.items,
+          uuid: fData[0].data?.uuid,
+          type: 'file'
+        }
+      }).catch(e => console.log('e', e));
+    },
+    editShareFolderByIdFn(share_data){
+      this.$refs['sfm2'].show();
+      this.fc = share_data;
+    },
+    editShareFileByIdFn(share_data){
+      this.$refs['sfm3'].show();
+      this.fc = share_data;
+    },
+    closeShareModal(){
+      this.$refs['sfm'].hide();
+      this.resetShareDataDetails();
+    },
+    closeEditShareModal(){
+      this.$refs['sfm2'].hide();
+      this.getAllDocumentsAn();
+      this.resetShareDataDetails();
+    },
+    closeEditFileShareModal(){
+      this.$refs['sfm3'].hide();
+      this.getAllDocumentsAn();
+      this.resetShareDataDetails();
+    },
+    updateFolderFn(e, doc) {
+      const payload = {
+        newName: e,
+        uuid: doc.data.uuid
+      }
+      this.updateFolderNameAn(payload)
+    },
+    async uploadDocs(event, id) {
+
+      this.isFileUploading = true;
+
+      if(!event.target.files) return;
+
+      const fd = new FormData()
+      for (let i = 0; i < event.target.files.length; i++ ){
+        fd.append('files[' + i + ']', event.target.files[i]);
+      }
+
+      fd.append('uuid', 'uuid')
+
+      if(id !== null){
+        fd.append('parent_folder_id', parseInt(id))
+      }
+
+      await axios.post('/upload/file', fd, {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          },
+          onUploadProgress: function (progressEvent) {
+            console.log(parseInt( Math.round( ( progressEvent.loaded / progressEvent.total ) * 100 ) ));
+            // this.uploadPercentage = parseInt( Math.round( ( progressEvent.loaded / progressEvent.total ) * 100 ) );
+          }.bind(this)
+        }).then((res) => {
+          if(res.status === 200){
+            this.$refs['right-menu'].hide();
+            if(this.$store.getters['Browser/getFolderUuid'] !== null){
+              this.getDocDetailsAn(this.$store.getters['Browser/getFolderUuid']);
+            } else {
+              this.getAllDocumentsAn();
+            }
+            this.isFileUploading = false;
+          } else {
+            alert('something went wrong in file upload');
+          }
+        }).catch(e => console.log(e));
+    },
+    getDocDetailsFn(folder_uuid){
+      this.getDocDetailsAn(folder_uuid)
+    }
   },
-  getDocDetailsFn(folder_uuid){
-    this.$router.push({ name: 'drive.filebrowserdetail', params : { uuid: folder_uuid}})
-  }
-  },
-  mounted() {
+  created() {
     this.getDocDetailsAn(this.$route.params.uuid)
   }
 }
