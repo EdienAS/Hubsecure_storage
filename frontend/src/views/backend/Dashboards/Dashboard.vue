@@ -180,7 +180,7 @@
                       <b-dropdown-item @click="showViewFileModalFn(file.data.uuid)"><i class="ri-eye-fill mr-2"></i>{{ "view" }}</b-dropdown-item>
                       <b-dropdown-item @click="deleteFileByIdToTrash(file.data.uuid)"><i class="ri-recycle-line mr-2"></i>{{ "trash" }}</b-dropdown-item>
                       <b-dropdown-item @click="deleteFileByIdPermanently(file.data.uuid)"><i class="ri-delete-bin-6-fill mr-2"></i>{{ "delete" }}</b-dropdown-item>
-                      <b-dropdown-item @click="downloadFileById({ base_name: file.data.attributes.basename })"><i class="ri-folder-download-fill mr-2"></i>{{ "download" }}</b-dropdown-item>
+                      <b-dropdown-item @click="downloadFileById({ base_name: file.data.attributes.basename, file_name: file.data.attributes.name })"><i class="ri-folder-download-fill mr-2"></i>{{ "download" }}</b-dropdown-item>
                     </b-dropdown>
                   </span>
                 </td>
