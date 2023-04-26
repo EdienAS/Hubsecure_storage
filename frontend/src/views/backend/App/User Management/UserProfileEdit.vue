@@ -299,12 +299,12 @@ export default {
       }
     },
     setNewPasswordFn() {
-      if (this.f_name || this.l_name) {
-        this.fullName = this.f_name + this.l_name;
-      }
+      // if (this.f_name || this.l_name) {
+      //   this.fullName = this.f_name + this.l_name;
+      // }
       const payload = {
         _method: 'patch',
-        name: this.fullName ? this.fullName : '',
+        // name: this.fullName ? this.fullName : '',
         current_password: this.current_password,
         password: this.password,
         password_confirmation: this.password_confirmation
