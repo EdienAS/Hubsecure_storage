@@ -8,7 +8,7 @@
           <div class="navbar-breadcrumb">
             <nav aria-label="breadcrumb">
               <ul class="breadcrumb">
-                <li disabled style="cursor: not-allowed" class="breadcrumb-item active"><i class="ri-home-2-fill mr-2 pt-1"></i> Home</li>
+                <li class="breadcrumb-item" style="cursor: pointer;" @click.prevent="goToHome"><i class="ri-home-2-fill mr-2 pt-1"></i> Home</li>
                 <!-- <li disabled style="cursor: not-allowed" class="breadcrumb-item" aria-current="page">Uploaded Files</li> -->
               </ul>
             </nav>
@@ -60,7 +60,7 @@
         <div class="row">
           <div class="col-lg-3 col-md-3 col-sm-6" v-for="doc in getAllDocumentsItems" :key="doc.uuid">
             <!-- folder :: start  -->
-            <div v-if="doc.data.type === 'folder'" class="card" @click="showSingleFolderDetailFn(doc.data.uuid)" @dblclick="getDocDetailsFn(doc.data.uuid)">
+            <div v-if="doc.data.type === 'folder'" class="card" @click="showSingleFolderDetailFn(doc.data.uuid)" @dblclick.prevent="getDocDetailsFn(doc.data.uuid)">
               <div class="card-body hub-mydrive-folder" style="cursor: pointer">
                 <!-- folderImg :: start -->
                 <div class="d-flex justify-content-between">
@@ -818,8 +818,12 @@ export default {
           }
         }).catch(e => console.log(e));
     },
-    getDocDetailsFn(folder_uuid){
-      this.getDocDetailsAn(folder_uuid)
+    getDocDetailsFn(folder_uuid) {
+      this.$router.push({ name: 'drive.filebrowserdetail', params: { uuid: folder_uuid } });
+      this.getDocDetailsAn(folder_uuid);
+    },
+    goToHome() {
+      this.$router.push({name: 'drive.filebrowser'})
     }
   },
   created() {
