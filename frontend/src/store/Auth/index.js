@@ -112,7 +112,7 @@ export default {
           .then((res) => {
             commit("HbSetUserMn", res.data.data);
             commit("HbSetToken", res.data.data.token);
-
+            commit("HbSetUUID", res.data.data.uuid);
             Vue.swal
               .fire({
                 position: "top-center",

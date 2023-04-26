@@ -295,7 +295,7 @@ export default {
           _method: 'patch',
           name: this.fullName,
         }
-        this.HbSetNewPassword(payload);
+        this.HbUpdateProfile(payload);
       }
     },
     setNewPasswordFn() {
