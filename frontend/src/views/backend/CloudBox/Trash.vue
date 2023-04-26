@@ -2,8 +2,8 @@
   <div class="container-fluid">
     <Loader v-model="getHbLoader" class="loader" />
     <div class="icon icon-grid i-grid" v-if="!getHbLoader">
+      <!-- containerRow :: start -->
       <div class="row">
-        <!-- new :: start -->
         <div class="col-lg-3 col-md-3 col-sm-6" v-for="doc in getAllDocumentsItems" :key="doc.uuid">
           <!-- folder :: start  -->
           <div v-if="doc.data.type === 'folder'" class="card" @click="showSingleFolderDetailFn(doc.data.uuid)" @dblclick.prevent="getDocDetailsFn(doc.data.uuid)">
@@ -56,9 +56,43 @@
           </div>
           <!-- folder :: end  -->
 
+          <!-- audio :: start -->
+          <div v-if="doc.data.type === 'audio'" @click="showSingleFileDetailFn(doc.data.uuid)" class="card card-block card-stretch card-height my-drive-files my-files-slides" style="cursor: pointer">
+            <div class="card-body image-thumb">
+              <div class="mb-4 text-center p-3 rounded iq-thumb">
+                <div class="iq-image-overlay"></div>
+                <a href="#" :data-title="doc.data.attributes.name" :data-url="doc.data.attributes.file_url" @click="$root.$emit('bv::show::modal', 'viewer-modal', $event.target)" v-b-modal.viewer-modal>
+                  <b-img class="file-slides" rounded fluid :src="require('@/assets/images/page-img/music.png')" alt="slides"></b-img>
+                </a>
+              </div>
+              <div class="d-flex justify-content-between align-items-center">
+                <h6>
+                  <span class="mr-1" v-if="doc.data.relationships.shared"
+                    ><b><i class="ri-links-line" style="color: #8d93f2 !important"></i></b
+                  ></span>
+                  {{ doc.data.attributes.name.length > 15 ? `${doc.data.attributes.name.substring(0, 15)}...` : doc.data.attributes.name }}
+                </h6>
+                <div class="card-header-toolbar">
+                  <b-dropdown id="dropdownMenuButton05" right variant="none" data-toggle="dropdown">
+                    <template v-slot:button-content>
+                      <i class="ri-more-fill"></i>
+                    </template>
+                    <b-dropdown-item @click="secureFileByIdFn(doc.data.uuid)"><i class="ri-file-shield-2-line"></i> Secure With XRPL</b-dropdown-item>
+                    <b-dropdown-item @click="downloadFileById({ base_name: doc.data.attributes.basename, file_name: doc.data.attributes.name })"><i class="ri-download-2-fill mr-2"></i>Download</b-dropdown-item>
+                    <b-dropdown-item @click="deleteFileByIdToTrash(doc.data.uuid)"><i class="ri-eye-fill mr-2"></i>Move To Trash</b-dropdown-item>
+                    <b-dropdown-item @click="deleteFileByIdPermanently(doc.data.uuid)"><i class="ri-delete-bin-6-fill mr-2"></i>Delete Permanently</b-dropdown-item>
+                    <b-dropdown-item v-if="!doc.data.relationships.shared" @click="shareFileByIdFn(doc.data.uuid)"><i class="ri-share-line mr-2"></i>Share</b-dropdown-item>
+                    <b-dropdown-item v-if="doc.data.relationships.shared" @click="editShareFileByIdFn(doc.data.relationships.shared?.data?.attributes)"><i class="ri-share-line mr-2"></i>Edit Share</b-dropdown-item>
+                  </b-dropdown>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- audio :: end -->
+
           <!-- image :: start -->
           <div v-if="doc.data.type === 'image'" @click="showSingleFileDetailFn(doc.data.uuid)" style="cursor: pointer">
-            <cardlist :shared="doc.data.relationships.shared" :image_name="doc.data.attributes.name" :thumbnail_url="doc.data.attributes.thumbnail.sm" v-if="doc.data.attributes.mimetype == 'jpg' || doc.data.attributes.mimetype == 'jpeg' || doc.data.attributes.mimetype == 'png'">
+            <cardlist :shared="doc.data.relationships.shared" :image_name="doc.data.attributes.name" :thumbnail_url="doc.data.attributes.thumbnail.sm">
               <template v-slot:dropdown>
                 <div class="card-header-toolbar">
                   <b-dropdown id="dropdownMenuButton05" right variant="none" data-toggle="dropdown">
@@ -77,42 +111,6 @@
             </cardlist>
           </div>
           <!-- image :: end -->
-
-          <!-- svg :: start -->
-          <div v-if="doc.data.type === 'image' && doc.data.attributes.mimetype == 'svg'" @click="showSingleFileDetailFn(doc.data.uuid)" style="cursor: pointer">
-            <div class="card card-block card-stretch card-height my-drive-files my-files-pdf">
-              <div class="card-body image-thumb">
-                <div class="mb-4 text-center p-3 rounded iq-thumb">
-                  <div class="iq-image-overlay"></div>
-                  <a href="#" :data-url="doc.data.attributes.file_url" :data-title="doc.data.attributes.name" @click="$root.$emit('bv::show::modal', 'viewer-modal', $event.target)" v-b-modal.viewer-modal>
-                    <b-img class="file-pdf" rounded fluid :src="require('@/assets/images/page-img/svgx80.svg')" alt="pdf"></b-img>
-                  </a>
-                </div>
-                <div class="d-flex justify-content-between align-items-center">
-                  <h6>
-                    <span class="mr-1" v-if="doc.data.relationships.shared"
-                      ><b><i class="ri-links-line" style="color: #8d93f2 !important"></i></b
-                    ></span>
-                    {{ doc.data.attributes.name.length > 15 ? `${doc.data.attributes.name.substring(0, 15)}...` : doc.data.attributes.name }}
-                  </h6>
-                  <div class="card-header-toolbar">
-                    <b-dropdown id="dropdownMenuButton05" right variant="none" data-toggle="dropdown">
-                      <template v-slot:button-content>
-                        <i class="ri-more-fill"></i>
-                      </template>
-                      <b-dropdown-item @click="secureFileByIdFn(doc.data.uuid)"><i class="ri-file-shield-2-line"></i> Secure With XRPL</b-dropdown-item>
-                      <b-dropdown-item @click="downloadFileById({ base_name: doc.data.attributes.basename, file_name: doc.data.attributes.name })"><i class="ri-download-2-fill mr-2"></i>Download</b-dropdown-item>
-                      <b-dropdown-item @click="deleteFileByIdToTrash(doc.data.uuid)"><i class="ri-eye-fill mr-2"></i>Move To Trash</b-dropdown-item>
-                      <b-dropdown-item @click="deleteFileByIdPermanently(doc.data.uuid)"><i class="ri-delete-bin-6-fill mr-2"></i>Delete Permanently</b-dropdown-item>
-                      <b-dropdown-item v-if="!doc.data.relationships.shared" @click="shareFileByIdFn(doc.data.uuid)"><i class="ri-share-line mr-2"></i>Share</b-dropdown-item>
-                      <b-dropdown-item v-if="doc.data.relationships.shared" @click="editShareFileByIdFn(doc.data.relationships.shared?.data?.attributes)"><i class="ri-share-line mr-2"></i>Edit Share</b-dropdown-item>
-                    </b-dropdown>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <!-- svg :: end -->
 
           <!-- pdf :: start -->
           <div @click="showSingleFileDetailFn(doc.data.uuid)" v-if="doc.data.type === 'file' && doc.data.attributes.mimetype == 'pdf'" style="cursor: pointer">
@@ -325,7 +323,7 @@
           <!-- zip :: end -->
 
           <!-- default :: start -->
-          <div @click="showSingleFileDetailFn(doc.data.uuid)" v-else-if="doc.data.type === 'file'" class="card card-block card-stretch card-height my-drive-files my-files-slides" style="cursor: pointer">
+          <div v-else-if="doc.data.type === 'file'" @click="showSingleFileDetailFn(doc.data.uuid)" class="card card-block card-stretch card-height my-drive-files my-files-slides" style="cursor: pointer">
             <div class="card-body image-thumb">
               <div class="mb-4 text-center p-3 rounded iq-thumb">
                 <div class="iq-image-overlay"></div>
@@ -358,8 +356,16 @@
           </div>
           <!-- default :: end -->
         </div>
-        <!-- new :: end -->
+        <div v-if="getAllDocumentsItems.length === 0" class="under-folder-upload col-lg-6 offset-lg-3">
+          <div class="under-folder-inner">
+            <h5>Upload Your First File</h5>
+            <p>Upload some files here easily via upload button.</p>
+            <input style="display: none" id="file-upload" ref="fileInput" @change="uploadDocs($event, getParentFolderId)" type="file" name="fileUpload" accept="*" multiple />
+            <button class="btn btn-primary" @click="$refs.fileInput.click()">Upload Files</button>
+          </div>
+        </div>
       </div>
+      <!-- containerRow :: end -->
       <div v-if="getAllDocumentsItems.length === 0">
         <div class="d-flex justify-content-center align-items-center py-4 my-4">
           <h3 class="text-muted">No Trash Found</h3>
