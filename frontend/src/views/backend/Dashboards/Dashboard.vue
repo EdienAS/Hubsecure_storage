@@ -195,9 +195,9 @@
           <!-- fileDetail :: start -->
           <div v-if="getRightSideFileDetail" class="mx-auto">
             <div>
-              <div class="d-flex align-items-start justify-content-start">
-                <b-img fluid-grow :src="getRightSideFileDetail[0].data.attributes.thumbnail.sm" :alt="getRightSideFileDetail[0].data.attributes.name" />
-              </div>
+              <!-- <div class="d-flex align-items-start justify-content-start">
+                <b-img fluid-grow :src="getRightSideFileDetail[0].data.attributes.thumbnail" :alt="getRightSideFileDetail[0].data.attributes.name" />
+              </div> -->
               <div>
                 <p>{{ getRightSideFileDetail[0].data.attributes.name }}</p>
               </div>
