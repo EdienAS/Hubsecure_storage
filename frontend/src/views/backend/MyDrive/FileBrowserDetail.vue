@@ -110,6 +110,40 @@
             </div>
             <!-- folder :: end  -->
 
+            <!-- mp4 :: start -->
+            <div v-if="doc.data.type === 'video'" @click="showSingleFileDetailFn(doc.data.uuid)" class="card card-block card-stretch card-height my-drive-files my-files-slides" style="cursor: pointer">
+              <div class="card-body image-thumb">
+                <div class="mb-4 text-center p-3 rounded iq-thumb">
+                  <div class="iq-image-overlay"></div>
+                  <a href="#" :data-title="doc.data.attributes.name" :data-url="doc.data.attributes.file_url" @click="$root.$emit('bv::show::modal', 'viewer-modal', $event.target)" v-b-modal.viewer-modal>
+                    <b-img class="file-slides" rounded fluid :src="require('@/assets/images/page-img/videox80.svg')" alt="slides"></b-img>
+                  </a>
+                </div>
+                <div class="d-flex justify-content-between align-items-center">
+                  <h6>
+                    <span class="mr-1" v-if="doc.data.relationships.shared"
+                      ><b><i class="ri-links-line" style="color: #8d93f2 !important"></i></b
+                    ></span>
+                    {{ doc.data.attributes.name.length > 15 ? `${doc.data.attributes.name.substring(0, 15)}...` : doc.data.attributes.name }}
+                  </h6>
+                  <div class="card-header-toolbar">
+                    <b-dropdown id="dropdownMenuButton05" right variant="none" data-toggle="dropdown">
+                      <template v-slot:button-content>
+                        <i class="ri-more-fill"></i>
+                      </template>
+                      <b-dropdown-item @click="secureFileByIdFn(doc.data.uuid)"><i class="ri-file-shield-2-line"></i> Secure With XRPL</b-dropdown-item>
+                      <b-dropdown-item @click="downloadFileById({ base_name: doc.data.attributes.basename, file_name: doc.data.attributes.name })"><i class="ri-download-2-fill mr-2"></i>Download</b-dropdown-item>
+                      <b-dropdown-item @click="deleteFileByIdToTrash(doc.data.uuid)"><i class="ri-eye-fill mr-2"></i>Move To Trash</b-dropdown-item>
+                      <b-dropdown-item @click="deleteFileByIdPermanently(doc.data.uuid)"><i class="ri-delete-bin-6-fill mr-2"></i>Delete Permanently</b-dropdown-item>
+                      <b-dropdown-item v-if="!doc.data.relationships.shared" @click="shareFileByIdFn(doc.data.uuid)"><i class="ri-share-line mr-2"></i>Share</b-dropdown-item>
+                      <b-dropdown-item v-if="doc.data.relationships.shared" @click="editShareFileByIdFn(doc.data.relationships.shared?.data?.attributes)"><i class="ri-share-line mr-2"></i>Edit Share</b-dropdown-item>
+                    </b-dropdown>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- mp4 :: end -->
+
             <!-- audio :: start -->
             <div v-if="doc.data.type === 'audio'" @click="showSingleFileDetailFn(doc.data.uuid)" class="card card-block card-stretch card-height my-drive-files my-files-slides" style="cursor: pointer">
               <div class="card-body image-thumb">
@@ -206,7 +240,7 @@
             <!-- pdf :: end -->
 
             <!-- docx :: start -->
-            <div @click="showSingleFileDetailFn(doc.data.uuid)" v-else-if="(doc.data.type === 'file' && doc.data.attributes.mimetype == 'doc') || doc.data.attributes.mimetype == 'docx'" class="card card-block card-stretch card-height my-drive-files my-files-doc" style="cursor: pointer">
+            <div @click="showSingleFileDetailFn(doc.data.uuid)" v-else-if="doc.data.type === 'file' && doc.data.attributes.mimetype === ('doc' || 'docx')" class="card card-block card-stretch card-height my-drive-files my-files-doc" style="cursor: pointer">
               <div class="card-body image-thumb">
                 <div class="mb-4 text-center p-3 rounded iq-thumb">
                   <div class="iq-image-overlay"></div>
@@ -241,7 +275,7 @@
             <!-- docx :: end -->
 
             <!-- xlsx :: start -->
-            <div @click="showSingleFileDetailFn(doc.data.uuid)" v-else-if="(doc.data.type === 'file' && doc.data.attributes.mimetype == 'xls') || doc.data.attributes.mimetype == 'xlsx'" class="card card-block card-stretch card-height my-drive-files my-files-sheet" style="cursor: pointer">
+            <div @click="showSingleFileDetailFn(doc.data.uuid)" v-else-if="doc.data.type === 'file' && doc.data.attributes.mimetype === ('xls' || 'xlsx')" class="card card-block card-stretch card-height my-drive-files my-files-sheet" style="cursor: pointer">
               <div class="card-body image-thumb">
                 <div class="mb-4 text-center p-3 rounded iq-thumb">
                   <div class="iq-image-overlay"></div>
@@ -275,7 +309,7 @@
             <!-- xlsx :: end -->
 
             <!-- pptx :: start -->
-            <div @click="showSingleFileDetailFn(doc.data.uuid)" v-else-if="(doc.data.type === 'file' && doc.data.attributes.mimetype == 'ppt') || doc.data.attributes.mimetype == 'pptx'" class="card card-block card-stretch card-height my-drive-files my-files-slides" style="cursor: pointer">
+            <div @click="showSingleFileDetailFn(doc.data.uuid)" v-else-if="doc.data.type === 'file' && doc.data.attributes.mimetype === ('ppt' || 'pptx')" class="card card-block card-stretch card-height my-drive-files my-files-slides" style="cursor: pointer">
               <div class="card-body image-thumb">
                 <div class="mb-4 text-center p-3 rounded iq-thumb">
                   <div class="iq-image-overlay"></div>
@@ -308,42 +342,8 @@
             </div>
             <!-- pptx :: end -->
 
-            <!-- mp4 :: start -->
-            <div @click="showSingleFileDetailFn(doc.data.uuid)" v-else-if="doc.data.type === 'video' && doc.data.attributes.mimetype == 'mp4'" class="card card-block card-stretch card-height my-drive-files my-files-slides" style="cursor: pointer">
-              <div class="card-body image-thumb">
-                <div class="mb-4 text-center p-3 rounded iq-thumb">
-                  <div class="iq-image-overlay"></div>
-                  <a href="#" :data-title="doc.data.attributes.name" :data-url="doc.data.attributes.file_url" @click="$root.$emit('bv::show::modal', 'viewer-modal', $event.target)" v-b-modal.viewer-modal>
-                    <b-img class="file-slides" rounded fluid :src="require('@/assets/images/page-img/videox80.svg')" alt="slides"></b-img>
-                  </a>
-                </div>
-                <div class="d-flex justify-content-between align-items-center">
-                  <h6>
-                    <span class="mr-1" v-if="doc.data.relationships.shared"
-                      ><b><i class="ri-links-line" style="color: #8d93f2 !important"></i></b
-                    ></span>
-                    {{ doc.data.attributes.name.length > 15 ? `${doc.data.attributes.name.substring(0, 15)}...` : doc.data.attributes.name }}
-                  </h6>
-                  <div class="card-header-toolbar">
-                    <b-dropdown id="dropdownMenuButton05" right variant="none" data-toggle="dropdown">
-                      <template v-slot:button-content>
-                        <i class="ri-more-fill"></i>
-                      </template>
-                      <b-dropdown-item @click="secureFileByIdFn(doc.data.uuid)"><i class="ri-file-shield-2-line"></i> Secure With XRPL</b-dropdown-item>
-                      <b-dropdown-item @click="downloadFileById({ base_name: doc.data.attributes.basename, file_name: doc.data.attributes.name })"><i class="ri-download-2-fill mr-2"></i>Download</b-dropdown-item>
-                      <b-dropdown-item @click="deleteFileByIdToTrash(doc.data.uuid)"><i class="ri-eye-fill mr-2"></i>Move To Trash</b-dropdown-item>
-                      <b-dropdown-item @click="deleteFileByIdPermanently(doc.data.uuid)"><i class="ri-delete-bin-6-fill mr-2"></i>Delete Permanently</b-dropdown-item>
-                      <b-dropdown-item v-if="!doc.data.relationships.shared" @click="shareFileByIdFn(doc.data.uuid)"><i class="ri-share-line mr-2"></i>Share</b-dropdown-item>
-                      <b-dropdown-item v-if="doc.data.relationships.shared" @click="editShareFileByIdFn(doc.data.relationships.shared?.data?.attributes)"><i class="ri-share-line mr-2"></i>Edit Share</b-dropdown-item>
-                    </b-dropdown>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <!-- mp4 :: end -->
-
             <!-- zip :: start -->
-            <div @click="showSingleFileDetailFn(doc.data.uuid)" v-else-if="doc.data.type === 'file' && doc.data.attributes.mimetype == 'zip'" class="card card-block card-stretch card-height my-drive-files my-files-slides" style="cursor: pointer">
+            <div @click="showSingleFileDetailFn(doc.data.uuid)" v-else-if="doc.data.type === 'file' && doc.data.attributes.mimetype === 'zip'" class="card card-block card-stretch card-height my-drive-files my-files-slides" style="cursor: pointer">
               <div class="card-body image-thumb">
                 <div class="mb-4 text-center p-3 rounded iq-thumb">
                   <div class="iq-image-overlay"></div>
