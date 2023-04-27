@@ -356,14 +356,6 @@
           </div>
           <!-- default :: end -->
         </div>
-        <div v-if="getAllDocumentsItems.length === 0" class="under-folder-upload col-lg-6 offset-lg-3">
-          <div class="under-folder-inner">
-            <h5>Upload Your First File</h5>
-            <p>Upload some files here easily via upload button.</p>
-            <input style="display: none" id="file-upload" ref="fileInput" @change="uploadDocs($event, getParentFolderId)" type="file" name="fileUpload" accept="*" multiple />
-            <button class="btn btn-primary" @click="$refs.fileInput.click()">Upload Files</button>
-          </div>
-        </div>
       </div>
       <!-- containerRow :: end -->
       <div v-if="getAllDocumentsItems.length === 0">
